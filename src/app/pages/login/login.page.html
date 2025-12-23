@@ -1,0 +1,56 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-section">
+        <ion-icon name="wallet-outline" class="logo-icon"></ion-icon>
+        <h1>Budget Tracker</h1>
+        <p>Welcome back!</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="text"
+            formControlName="username"
+            placeholder="Username"
+            class="custom-input"
+          ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          <ion-text color="danger">
+            <small>Username must be at least 3 characters</small>
+          </ion-text>
+        </div>
+
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="password"
+            formControlName="password"
+            placeholder="Password"
+            class="custom-input"
+          ></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <ion-text color="danger">
+            <small>Password must be at least 8 characters</small>
+          </ion-text>
+        </div>
+
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="login-button"
+        >
+          Log In
+        </ion-button>
+      </form>
+
+      <div class="signup-section">
+        <ion-text color="medium">
+          <p>Don't have an account? <a (click)="goToSignup()" class="signup-link">Sign Up</a></p>
+        </ion-text>
+      </div>
+    </div>
+  </div>
+</ion-content>

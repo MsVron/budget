@@ -1,0 +1,26 @@
+ion-content {
+  --background: #FFFFFF;
+}
+
+ion-toolbar {
+  --background: #2C3E50;
+  --color: #FFFFFF;
+}
+
+ion-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+
+.logout-button {
+  margin-top: 2rem;
+  --border-radius: 8px;
+  --padding-top: 0.625rem;
+  --padding-bottom: 0.625rem;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  height: auto;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+}
+

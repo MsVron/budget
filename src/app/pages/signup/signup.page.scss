@@ -1,0 +1,67 @@
+.signup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+}
+
+.signup-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E0E0E0;
+}
+
+.logo-section {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .logo-icon {
+    font-size: 64px;
+    color: #2C3E50;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    color: #000000;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    font-family: "Inter", sans-serif;
+  }
+
+  p {
+    color: #6C757D;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+  }
+}
+
+ion-card {
+  margin: 0 0 1.5rem 0;
+  box-shadow: none;
+  border: 1px solid #E0E0E0;
+  background: #FFFFFF;
+
+  p {
+    font-family: "Inter", sans-serif;
+  }
+}
+
+.login-button {
+  --border-radius: 8px;
+  --border-color: #2C3E50;
+  --color: #2C3E50;
+  --padding-top: 0.5rem;
+  --padding-bottom: 0.5rem;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  height: auto;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+}
+
