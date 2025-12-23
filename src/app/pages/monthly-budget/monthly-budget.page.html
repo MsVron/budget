@@ -1,69 +1,52 @@
 <ion-header [translucent]="true">
-  <!-- <ion-toolbar color="primary">
-    <ion-title>Monthly Budget</ion-title>
-  </ion-toolbar> -->
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- <ion-card>
-    <ion-card-header>
-      <ion-card-title>August 2025</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="budget-summary">
-        <div class="budget-item">
-          <ion-icon name="wallet" color="primary"></ion-icon>
-          <div>
-            <h3>Total Budget</h3>
-            <p class="amount">$3,000.00</p>
+  <div class="monthly-budget-container">
+    <div class="header-section">
+      <h1 class="page-title">Monthly Budget</h1>
+      <div class="starting-balance-badge">
+        <span class="label">Starting balance:</span>
+        <span class="amount">{{ formatCurrency(summary.startingBalance) }}</span>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="chart-section">
+        <div class="bar-chart">
+          <div class="bar-container">
+            <div 
+              class="bar total-balance-bar" 
+              [style.height.px]="getTotalBalanceHeight()">
+            </div>
+            <div class="bar-label">
+              <div class="label-text">TOTAL BALANCE</div>
+              <div class="label-amount">{{ formatCurrency(summary.startingBalance) }}</div>
+            </div>
           </div>
-        </div>
-        <div class="budget-item">
-          <ion-icon name="arrow-down-circle" color="danger"></ion-icon>
-          <div>
-            <h3>Spent</h3>
-            <p class="amount">$1,250.00</p>
-          </div>
-        </div>
-        <div class="budget-item">
-          <ion-icon name="arrow-up-circle" color="success"></ion-icon>
-          <div>
-            <h3>Remaining</h3>
-            <p class="amount">$1,750.00</p>
+
+          <div class="bar-container">
+            <div 
+              class="bar end-balance-bar" 
+              [style.height.px]="getEndBalanceHeight()">
+            </div>
+            <div class="bar-label">
+              <div class="label-text">END BALANCE</div>
+              <div class="label-amount">{{ formatCurrency(summary.endBalance) }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </ion-card-content>
-  </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Budget Categories</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-label>
-            <h2>Food & Dining</h2>
-            <p>$450 / $600</p>
-          </ion-label>
-          <ion-badge color="warning" slot="end">75%</ion-badge>
-        </ion-item>
-        <ion-item>
-          <ion-label>
-            <h2>Transportation</h2>
-            <p>$200 / $400</p>
-          </ion-label>
-          <ion-badge color="success" slot="end">50%</ion-badge>
-        </ion-item>
-        <ion-item>
-          <ion-label>
-            <h2>Entertainment</h2>
-            <p>$150 / $300</p>
-          </ion-label>
-          <ion-badge color="success" slot="end">50%</ion-badge>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card> -->
+      <div class="savings-card">
+        <div class="savings-percentage">
+          <span class="plus-sign">+</span>{{ summary.savingsPercentage }}%
+        </div>
+        <div class="savings-label">Total savings</div>
+        <div class="divider"></div>
+        <div class="savings-amount">{{ formatCurrency(summary.totalSaved) }}</div>
+        <div class="savings-sublabel">Saved this month</div>
+      </div>
+    </div>
+  </div>
 </ion-content>

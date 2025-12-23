@@ -25,6 +25,19 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+:root {
+  --color-primary-navy: #2C3E50;
+  --color-primary-orange: #FF6B35;
+  --color-success-green: #4CAF50;
+  --color-background-light: #F5F5F5;
+  --color-background-white: #FFFFFF;
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #666666;
+  --color-text-light: #8B5A9B;
+  --color-danger: #FF3B30;
+  --color-warning: #FFCC00;
+}
+
 * {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -32,10 +45,10 @@
 }
 
 body {
-  --ion-background-color: #FFFFFF;
-  --ion-text-color: #000000;
+  --ion-background-color: var(--color-background-white);
+  --ion-text-color: var(--color-text-primary);
 }
 
 ion-content {
-  --background: #FFFFFF;
+  --background: var(--color-background-white);
 }
