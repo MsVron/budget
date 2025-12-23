@@ -27,12 +27,14 @@ export interface CategoryBudget {
   planned: number;
   actual: number;
   color?: string;
+  expanded?: boolean;
 }
 
 export interface IncomeBudget {
   source: string;
   planned: number;
   actual: number;
+  expanded?: boolean;
 }
 
 export interface ExpensesIncomeSummary {

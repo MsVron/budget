@@ -35,46 +35,53 @@
         </div>
       </div>
 
-      <div class="section-header">
-        <h2>Expenses</h2>
+      <div class="totals-summary">
+        <div class="summary-row">
+          <span class="summary-label">Planned</span>
+          <span class="summary-value planned">{{ formatCurrency(totalExpensesPlanned) }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Actual</span>
+          <span class="summary-value actual">{{ formatCurrency(totalExpensesActual) }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Difference</span>
+          <span class="summary-value" [class]="getDifferenceClass(totalExpensesDifference)">
+            {{ formatCurrency(totalExpensesDifference) }}
+          </span>
+        </div>
       </div>
 
-      <div class="table-container">
-        <table class="budget-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Planned</th>
-              <th>Actual</th>
-              <th>Diff.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="totals-row">
-              <td><strong>Totals</strong></td>
-              <td>{{ formatCurrency(totalExpensesPlanned) }}</td>
-              <td>{{ formatCurrency(totalExpensesActual) }}</td>
-              <td [class]="getDifferenceClass(totalExpensesDifference)">
-                {{ formatCurrency(totalExpensesDifference) }}
-              </td>
-            </tr>
-            <tr *ngFor="let category of expenseCategories" [class.colored-row]="category.color" [style.background-color]="category.color">
-              <td class="category-name">
-                <ion-icon name="chevron-down-outline"></ion-icon>
-                {{ category.category }}
-              </td>
-              <td>{{ formatCurrency(category.planned) }}</td>
-              <td>{{ formatCurrency(category.actual) }}</td>
-              <td [class]="getDifferenceClass(category.planned - category.actual)">
+      <div class="category-list">
+        <div *ngFor="let category of expenseCategories; let i = index" class="category-card" [class.expanded]="category.expanded">
+          <div class="category-header" (click)="toggleCategory(i, 'expense')" [style.background-color]="category.color">
+            <span class="category-name">{{ category.category }}</span>
+            <ion-icon [name]="category.expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon"></ion-icon>
+          </div>
+          <div class="card-content" *ngIf="category.expanded">
+            <div class="amount-row planned-row">
+              <span class="amount-label">Planned</span>
+              <span class="amount-value">{{ formatCurrency(category.planned) }}</span>
+            </div>
+            <div class="amount-row actual-row">
+              <span class="amount-label">Actual</span>
+              <span class="amount-value">{{ formatCurrency(category.actual) }}</span>
+            </div>
+            <div class="amount-row diff-row">
+              <span class="amount-label">Diff.</span>
+              <span class="amount-value diff-value" [class]="getDifferenceClass(category.planned - category.actual)">
                 {{ formatCurrency(category.planned - category.actual) }}
-              </td>
-            </tr>
-            <tr class="left-row">
-              <td colspan="3"><strong>Left:</strong></td>
-              <td>{{ formatCurrency(totalExpensesDifference) }}</td>
-            </tr>
-          </tbody>
-        </table>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="remaining-section">
+        <span class="remaining-label">Left:</span>
+        <span class="remaining-value" [class]="getDifferenceClass(totalExpensesDifference)">
+          {{ formatCurrency(totalExpensesDifference) }}
+        </span>
       </div>
     </div>
 
@@ -100,39 +107,46 @@
         </div>
       </div>
 
-      <div class="section-header">
-        <h2>Income</h2>
+      <div class="totals-summary">
+        <div class="summary-row">
+          <span class="summary-label">Planned</span>
+          <span class="summary-value planned">{{ formatCurrency(totalIncomePlanned) }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Actual</span>
+          <span class="summary-value actual">{{ formatCurrency(totalIncomeActual) }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Difference</span>
+          <span class="summary-value" [class]="getDifferenceClass(totalIncomeDifference)">
+            {{ formatCurrency(totalIncomeDifference) }}
+          </span>
+        </div>
       </div>
 
-      <div class="table-container">
-        <table class="budget-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Planned</th>
-              <th>Actual</th>
-              <th>Diff.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="totals-row">
-              <td><strong>Totals</strong></td>
-              <td>{{ formatCurrency(totalIncomePlanned) }}</td>
-              <td>{{ formatCurrency(totalIncomeActual) }}</td>
-              <td [class]="getDifferenceClass(totalIncomeDifference)">
-                {{ formatCurrency(totalIncomeDifference) }}
-              </td>
-            </tr>
-            <tr *ngFor="let source of incomeSources" class="income-row">
-              <td class="category-name">{{ source.source }}</td>
-              <td>{{ formatCurrency(source.planned) }}</td>
-              <td>{{ formatCurrency(source.actual) }}</td>
-              <td [class]="getDifferenceClass(source.actual - source.planned)">
+      <div class="income-list">
+        <div *ngFor="let source of incomeSources; let i = index" class="income-card" [class.expanded]="source.expanded">
+          <div class="income-header" (click)="toggleIncome(i)">
+            <div class="income-source-label">{{ source.source }}</div>
+            <ion-icon [name]="source.expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon"></ion-icon>
+          </div>
+          <div class="card-content" *ngIf="source.expanded">
+            <div class="amount-row planned-row">
+              <span class="amount-label">Planned</span>
+              <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
+            </div>
+            <div class="amount-row actual-row">
+              <span class="amount-label">Actual</span>
+              <span class="amount-value">{{ formatCurrency(source.actual) }}</span>
+            </div>
+            <div class="amount-row diff-row">
+              <span class="amount-label">Diff.</span>
+              <span class="amount-value diff-value" [class]="getDifferenceClass(source.actual - source.planned)">
                 {{ formatCurrency(source.actual - source.planned) }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

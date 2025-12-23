@@ -51,6 +51,20 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
 
   updateSummary() {
     this.summary = this.budgetService.getExpensesIncomeSummary();
+    this.summary.expenses.categories.forEach(cat => cat.expanded = false);
+    this.summary.income.sources.forEach(src => src.expanded = false);
+  }
+
+  toggleCategory(index: number, type: 'expense' | 'income') {
+    if (type === 'expense') {
+      const category = this.summary.expenses.categories[index];
+      category.expanded = !category.expanded;
+    }
+  }
+
+  toggleIncome(index: number) {
+    const source = this.summary.income.sources[index];
+    source.expanded = !source.expanded;
   }
 
   onSegmentChange(event: any) {

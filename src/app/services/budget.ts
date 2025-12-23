@@ -130,11 +130,11 @@ export class BudgetService {
     const budgetData = this.budgetDataSubject.value;
     
     const categoryBudgets: { [key: string]: { planned: number; color?: string } } = {
-      'Food': { planned: 266.50, color: '#FFB3BA' },
-      'Transportation': { planned: 350.00, color: '#4A5568' },
-      'Self-Care': { planned: 330.00, color: '#FFB3BA' },
-      'Hygiene': { planned: 88.00, color: '#FFFFFF' },
-      'Phone': { planned: 49.00, color: '#2C5F7F' }
+      'Food': { planned: 266.50, color: '#FF6B35' },
+      'Transportation': { planned: 350.00, color: '#2C3E50' },
+      'Self-Care': { planned: 330.00, color: '#FF3B30' },
+      'Hygiene': { planned: 88.00, color: '#4CAF50' },
+      'Phone': { planned: 49.00, color: '#2C3E50' }
     };
 
     const incomeBudgets: { [key: string]: number } = {
