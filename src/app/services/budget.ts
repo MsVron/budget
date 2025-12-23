@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StorageService } from '@services/storage';
-import { BudgetData, Expense, MonthlyBudgetSummary } from '@models/budget.model';
+import { BudgetData, Expense, MonthlyBudgetSummary, ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +27,9 @@ export class BudgetService {
       this.budgetDataSubject.next(data);
     } else {
       const defaultData: BudgetData = {
-        savings: 1316.85,
-        paycheck: 1099.15,
-        bonus: 0,
+        savings: 916.00,
+        paycheck: 1200.00,
+        bonus: 300.00,
         month: 'August',
         year: 2025
       };
@@ -39,7 +39,19 @@ export class BudgetService {
 
   private async loadExpenses(): Promise<void> {
     const expenses = await this.storageService.get(this.EXPENSES_KEY);
-    this.expensesSubject.next(expenses || []);
+    if (expenses && expenses.length > 0) {
+      this.expensesSubject.next(expenses);
+    } else {
+      const sampleExpenses: Expense[] = [
+        { id: '1', amount: 147.15, category: 'Food', description: 'Groceries', date: new Date('2025-08-05') },
+        { id: '2', amount: 160.00, category: 'Transportation', description: 'Gas and parking', date: new Date('2025-08-10') },
+        { id: '3', amount: 519.00, category: 'Self-Care', description: 'Spa and wellness', date: new Date('2025-08-12') },
+        { id: '4', amount: 0.00, category: 'Hygiene', description: 'Personal care', date: new Date('2025-08-15') },
+        { id: '5', amount: 49.00, category: 'Phone', description: 'Mobile bill', date: new Date('2025-08-20') }
+      ];
+      await this.storageService.set(this.EXPENSES_KEY, sampleExpenses);
+      this.expensesSubject.next(sampleExpenses);
+    }
   }
 
   async saveBudgetData(data: BudgetData): Promise<void> {
@@ -111,6 +123,79 @@ export class BudgetService {
       spentAmount,
       savingsPercentage,
       totalSaved
+    };
+  }
+
+  getExpensesIncomeSummary(): ExpensesIncomeSummary {
+    const budgetData = this.budgetDataSubject.value;
+    
+    const categoryBudgets: { [key: string]: { planned: number; color?: string } } = {
+      'Food': { planned: 266.50, color: '#FFB3BA' },
+      'Transportation': { planned: 350.00, color: '#4A5568' },
+      'Self-Care': { planned: 330.00, color: '#FFB3BA' },
+      'Hygiene': { planned: 88.00, color: '#FFFFFF' },
+      'Phone': { planned: 49.00, color: '#2C5F7F' }
+    };
+
+    const incomeBudgets: { [key: string]: number } = {
+      'Savings': 458.00,
+      'Paycheck': 700.00,
+      'Bonus': 0.00
+    };
+
+    const monthlyExpenses = budgetData 
+      ? this.getMonthlyExpenses(budgetData.month, budgetData.year)
+      : [];
+
+    const expensesByCategory: { [key: string]: number } = {};
+    monthlyExpenses.forEach(expense => {
+      expensesByCategory[expense.category] = (expensesByCategory[expense.category] || 0) + expense.amount;
+    });
+
+    const expenseCategories: CategoryBudget[] = Object.keys(categoryBudgets).map(category => ({
+      category,
+      planned: categoryBudgets[category].planned,
+      actual: expensesByCategory[category] || 0,
+      color: categoryBudgets[category].color
+    }));
+
+    const totalExpensesPlanned = expenseCategories.reduce((sum, cat) => sum + cat.planned, 0);
+    const totalExpensesActual = expenseCategories.reduce((sum, cat) => sum + cat.actual, 0);
+
+    const incomeSources: IncomeBudget[] = [
+      {
+        source: 'Savings',
+        planned: incomeBudgets['Savings'],
+        actual: budgetData?.savings || 0
+      },
+      {
+        source: 'Paycheck',
+        planned: incomeBudgets['Paycheck'],
+        actual: budgetData?.paycheck || 0
+      },
+      {
+        source: 'Bonus',
+        planned: incomeBudgets['Bonus'],
+        actual: budgetData?.bonus || 0
+      }
+    ];
+
+    const totalIncomePlanned = incomeSources.reduce((sum, src) => sum + src.planned, 0);
+    const totalIncomeActual = incomeSources.reduce((sum, src) => sum + src.actual, 0);
+
+    return {
+      expenses: {
+        categories: expenseCategories,
+        totalPlanned: totalExpensesPlanned,
+        totalActual: totalExpensesActual,
+        difference: totalExpensesPlanned - totalExpensesActual
+      },
+      income: {
+        sources: incomeSources,
+        totalPlanned: totalIncomePlanned,
+        totalActual: totalIncomeActual,
+        difference: totalIncomeActual - totalIncomePlanned
+      }
     };
   }
 }

@@ -1,4 +1,4 @@
- export interface BudgetData {
+export interface BudgetData {
   savings: number;
   paycheck: number;
   bonus: number;
@@ -22,3 +22,30 @@ export interface MonthlyBudgetSummary {
   totalSaved: number;
 }
 
+export interface CategoryBudget {
+  category: string;
+  planned: number;
+  actual: number;
+  color?: string;
+}
+
+export interface IncomeBudget {
+  source: string;
+  planned: number;
+  actual: number;
+}
+
+export interface ExpensesIncomeSummary {
+  expenses: {
+    categories: CategoryBudget[];
+    totalPlanned: number;
+    totalActual: number;
+    difference: number;
+  };
+  income: {
+    sources: IncomeBudget[];
+    totalPlanned: number;
+    totalActual: number;
+    difference: number;
+  };
+}
