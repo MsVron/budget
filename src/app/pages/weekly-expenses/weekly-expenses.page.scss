@@ -23,6 +23,12 @@ ion-header {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px 0;
+
+  .month-selector-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .empty-state {
@@ -124,35 +130,28 @@ ion-header {
 
 .category-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background: var(--color-background-white);
   border-radius: 8px;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: translateX(4px);
-  }
-
-  .category-color-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 12px;
-    flex-shrink: 0;
+    opacity: 0.9;
+    transform: translateX(2px);
   }
 
   .category-name {
     flex: 1;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-background-white);
   }
 
   .category-amount {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    color: var(--color-text-primary);
+    color: var(--color-background-white);
   }
 }
 
@@ -233,18 +232,12 @@ ion-header {
   .category-row {
     padding: 10px;
 
-    .category-color-dot {
-      width: 10px;
-      height: 10px;
-      margin-right: 10px;
-    }
-
     .category-name {
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .category-amount {
-      font-size: 14px;
+      font-size: 13px;
     }
   }
 

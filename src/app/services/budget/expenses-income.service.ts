@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BudgetDataService } from '@services/budget/budget-data.service';
+import { PlannedBudgetService } from '@services/budget/planned-budget.service';
 import { CategoryService } from '@services/category/category.service';
 import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
 
@@ -7,12 +8,9 @@ import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/bud
   providedIn: 'root',
 })
 export class ExpensesIncomeService {
-  private readonly categoryBudgets: { [key: string]: { planned: number; color?: string } } = {};
-
-  private readonly incomeBudgets: { [key: string]: number } = {};
-
   constructor(
     private budgetDataService: BudgetDataService,
+    private plannedBudgetService: PlannedBudgetService,
     private categoryService: CategoryService
   ) {}
 
@@ -43,59 +41,71 @@ export class ExpensesIncomeService {
     // Process legacy expenses
     monthlyExpenses.forEach(expense => {
       if (!expensesByCategory[expense.category]) {
-        const categoryData = this.categoryBudgets[expense.category];
         const categoryFromService = this.categoryService.getCategoryByName(expense.category, 'expense');
         expensesByCategory[expense.category] = { 
           amount: 0, 
-          color: expense.categoryColor || categoryFromService?.color || categoryData?.color || '#95A5A6'
+          color: expense.categoryColor || categoryFromService?.color || '#95A5A6'
         };
       }
       expensesByCategory[expense.category].amount += expense.amount;
     });
 
-    // Get all unique categories from both planned budgets and actual expenses
+    // Get planned budgets for this month
+    const plannedExpenseBudgets = budgetData 
+      ? this.plannedBudgetService.getPlannedBudgets('expense', budgetData.month, budgetData.year)
+      : [];
+
+    // Combine all categories (from actual expenses and planned budgets)
     const allCategories = new Set([
-      ...Object.keys(this.categoryBudgets),
+      ...plannedExpenseBudgets.map(b => b.category),
       ...Object.keys(expensesByCategory)
     ]);
 
-    const expenseCategories: CategoryBudget[] = Array.from(allCategories).map(category => ({
-      category,
-      planned: this.categoryBudgets[category]?.planned || 0,
-      actual: expensesByCategory[category]?.amount || 0,
-      color: expensesByCategory[category]?.color || this.categoryBudgets[category]?.color || '#95A5A6'
-    }));
+    const expenseCategories: CategoryBudget[] = Array.from(allCategories).map(category => {
+      const planned = budgetData 
+        ? this.plannedBudgetService.getPlannedBudget(category, 'expense', budgetData.month, budgetData.year)
+        : 0;
+      
+      return {
+        category,
+        planned,
+        actual: expensesByCategory[category]?.amount || 0,
+        color: expensesByCategory[category]?.color || this.categoryService.getCategoryByName(category, 'expense')?.color || '#95A5A6'
+      };
+    });
 
     const totalExpensesPlanned = expenseCategories.reduce((sum, cat) => sum + cat.planned, 0);
     const totalExpensesActual = expenseCategories.reduce((sum, cat) => sum + cat.actual, 0);
 
-    // Process income transactions
-    const incomeBySource: { [key: string]: number } = {
-      'Savings': budgetData?.savings || 0,
-      'Paycheck': budgetData?.paycheck || 0,
-      'Bonus': budgetData?.bonus || 0
-    };
+    // Process income transactions - income comes from transactions only
+    const incomeBySource: { [key: string]: number } = {};
 
-    // Add income from transactions
+    // Calculate actual income from transactions
     monthlyTransactions.filter(t => t.type === 'income').forEach(transaction => {
       incomeBySource[transaction.category] = (incomeBySource[transaction.category] || 0) + transaction.amount;
     });
 
-    const incomeSources: IncomeBudget[] = Object.keys(this.incomeBudgets).map(source => ({
-      source,
-      planned: this.incomeBudgets[source],
-      actual: incomeBySource[source] || 0
-    }));
+    // Get planned income budgets for this month
+    const plannedIncomeBudgets = budgetData 
+      ? this.plannedBudgetService.getPlannedBudgets('income', budgetData.month, budgetData.year)
+      : [];
 
-    // Add any additional income sources from transactions not in default budgets
-    Object.keys(incomeBySource).forEach(source => {
-      if (!this.incomeBudgets[source]) {
-        incomeSources.push({
-          source,
-          planned: 0,
-          actual: incomeBySource[source]
-        });
-      }
+    // Combine all income sources (from actual income and planned budgets)
+    const allIncomeSources = new Set([
+      ...plannedIncomeBudgets.map(b => b.category),
+      ...Object.keys(incomeBySource)
+    ]);
+
+    const incomeSources: IncomeBudget[] = Array.from(allIncomeSources).map(source => {
+      const planned = budgetData 
+        ? this.plannedBudgetService.getPlannedBudget(source, 'income', budgetData.month, budgetData.year)
+        : 0;
+      
+      return {
+        source,
+        planned,
+        actual: incomeBySource[source] || 0
+      };
     });
 
     const totalIncomePlanned = incomeSources.reduce((sum, src) => sum + src.planned, 0);

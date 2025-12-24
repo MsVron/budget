@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MonthlyBudgetPageRoutingModule } from './monthly-budget-routing.module';
+import { MonthYearSelectorModule } from '@shared/components/month-year-selector/month-year-selector.module';
 
 import { MonthlyBudgetPage } from './monthly-budget.page';
 
@@ -13,7 +14,8 @@ import { MonthlyBudgetPage } from './monthly-budget.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    MonthlyBudgetPageRoutingModule
+    MonthlyBudgetPageRoutingModule,
+    MonthYearSelectorModule
   ],
   declarations: [MonthlyBudgetPage]
 })

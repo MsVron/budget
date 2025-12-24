@@ -1,7 +1,13 @@
 export interface BudgetData {
-  savings: number;
-  paycheck: number;
-  bonus: number;
+  month: string;
+  year: number;
+}
+
+export interface PlannedBudget {
+  id: string;
+  category: string;
+  type: 'expense' | 'income';
+  plannedAmount: number;
   month: string;
   year: number;
 }

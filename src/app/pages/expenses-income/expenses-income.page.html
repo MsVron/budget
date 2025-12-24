@@ -13,6 +13,13 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="expenses-income-container">
+    <div class="month-selector-wrapper">
+      <app-month-year-selector
+        [currentMonth]="currentMonth"
+        [currentYear]="currentYear"
+        (monthYearChange)="onMonthYearChange($event)">
+      </app-month-year-selector>
+    </div>
     <div *ngIf="selectedSegment === 'expenses'" class="expenses-section">
       <div class="summary-bars">
         <div class="bar-row">
@@ -61,7 +68,12 @@
           <div class="card-content" *ngIf="category.expanded">
             <div class="amount-row planned-row">
               <span class="amount-label">Planned</span>
-              <span class="amount-value">{{ formatCurrency(category.planned) }}</span>
+              <div class="amount-with-button">
+                <span class="amount-value">{{ formatCurrency(category.planned) }}</span>
+                <ion-button fill="clear" size="small" (click)="setPlannedBudget(category.category, 'expense', category.planned); $event.stopPropagation()">
+                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-button>
+              </div>
             </div>
             <div class="amount-row actual-row">
               <span class="amount-label">Actual</span>
@@ -133,7 +145,12 @@
           <div class="card-content" *ngIf="source.expanded">
             <div class="amount-row planned-row">
               <span class="amount-label">Planned</span>
-              <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
+              <div class="amount-with-button">
+                <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
+                <ion-button fill="clear" size="small" (click)="setPlannedBudget(source.source, 'income', source.planned); $event.stopPropagation()">
+                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-button>
+              </div>
             </div>
             <div class="amount-row actual-row">
               <span class="amount-label">Actual</span>

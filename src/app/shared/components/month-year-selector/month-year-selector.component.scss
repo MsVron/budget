@@ -1,0 +1,62 @@
+.month-year-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--color-background-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+  .nav-button {
+    --padding-start: 0.5rem;
+    --padding-end: 0.5rem;
+    --color: var(--color-primary-navy);
+    height: 36px;
+    width: 36px;
+    margin: 0;
+
+    ion-icon {
+      font-size: 20px;
+    }
+
+    &:hover {
+      --background: var(--color-background-light);
+    }
+  }
+
+  .month-year-display {
+    min-width: 150px;
+    text-align: center;
+    padding: 0 0.5rem;
+
+    .month-year-text {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .month-year-selector {
+    .month-year-display {
+      min-width: 130px;
+
+      .month-year-text {
+        font-size: 14px;
+      }
+    }
+
+    .nav-button {
+      height: 32px;
+      width: 32px;
+
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+  }
+}
+

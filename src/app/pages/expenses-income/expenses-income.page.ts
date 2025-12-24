@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { ModalController } from '@ionic/angular';
 import { BudgetDataService } from '@services/budget/budget-data.service';
+import { PlannedBudgetService } from '@services/budget/planned-budget.service';
 import { ExpensesIncomeService } from '@services/budget/expenses-income.service';
 import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
+import { SetPlannedBudgetModalComponent } from '@shared/modals/set-planned-budget-modal/set-planned-budget-modal.component';
 
 @Component({
   selector: 'app-expenses-income',
@@ -31,7 +34,9 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
 
   constructor(
     private budgetDataService: BudgetDataService,
-    private expensesIncomeService: ExpensesIncomeService
+    private plannedBudgetService: PlannedBudgetService,
+    private expensesIncomeService: ExpensesIncomeService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -48,6 +53,12 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
       });
 
     this.budgetDataService.transactions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateSummary();
+      });
+
+    this.budgetDataService.selectedMonthYear$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSummary();
@@ -129,5 +140,46 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
 
   get totalIncomeDifference(): number {
     return this.summary.income.difference;
+  }
+
+  async setPlannedBudget(category: string, type: 'expense' | 'income', currentPlanned: number) {
+    const budgetData = this.budgetDataService.getBudgetData();
+    if (!budgetData) return;
+
+    const modal = await this.modalController.create({
+      component: SetPlannedBudgetModalComponent,
+      componentProps: {
+        category,
+        type,
+        currentPlanned
+      }
+    });
+
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'confirm' && data) {
+      await this.plannedBudgetService.setPlannedBudget(
+        data.category,
+        data.type,
+        data.plannedAmount,
+        budgetData.month,
+        budgetData.year
+      );
+      this.updateSummary();
+    }
+  }
+
+  get currentMonth(): string {
+    return this.budgetDataService.getBudgetData()?.month || new Date().toLocaleString('en-US', { month: 'long' });
+  }
+
+  get currentYear(): number {
+    return this.budgetDataService.getBudgetData()?.year || new Date().getFullYear();
+  }
+
+  onMonthYearChange(event: { month: string; year: number }) {
+    this.budgetDataService.setSelectedMonthYear(event.month, event.year);
   }
 }

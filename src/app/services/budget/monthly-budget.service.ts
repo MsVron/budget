@@ -20,10 +20,9 @@ export class MonthlyBudgetService {
       };
     }
 
-    // Calculate starting balance from budget data and income transactions
+    // Calculate starting balance from income transactions only
     const monthlyIncomeTransactions = this.budgetDataService.getMonthlyTransactions(budgetData.month, budgetData.year, 'income');
-    const incomeFromTransactions = monthlyIncomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
-    const startingBalance = budgetData.savings + budgetData.paycheck + budgetData.bonus + incomeFromTransactions;
+    const startingBalance = monthlyIncomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
     
     // Calculate total spent from both legacy expenses and new expense transactions
     const monthlyExpenses = this.budgetDataService.getMonthlyExpenses(budgetData.month, budgetData.year);

@@ -5,6 +5,11 @@
   <div class="monthly-budget-container">
     <div class="header-section">
       <h1 class="page-title">Monthly Budget</h1>
+      <app-month-year-selector
+        [currentMonth]="currentMonth"
+        [currentYear]="currentYear"
+        (monthYearChange)="onMonthYearChange($event)">
+      </app-month-year-selector>
       <div class="starting-balance-badge">
         <span class="label">This month's starting balance:</span>
         <span class="amount">{{ formatCurrency(summary.startingBalance) }}</span>

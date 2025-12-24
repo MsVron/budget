@@ -14,10 +14,15 @@ export class BudgetDataService {
   private budgetDataSubject = new BehaviorSubject<BudgetData | null>(null);
   private expensesSubject = new BehaviorSubject<Expense[]>([]);
   private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
+  private selectedMonthYearSubject = new BehaviorSubject<{ month: string; year: number }>({
+    month: new Date().toLocaleString('en-US', { month: 'long' }),
+    year: new Date().getFullYear()
+  });
 
   budgetData$: Observable<BudgetData | null> = this.budgetDataSubject.asObservable();
   expenses$: Observable<Expense[]> = this.expensesSubject.asObservable();
   transactions$: Observable<Transaction[]> = this.transactionsSubject.asObservable();
+  selectedMonthYear$: Observable<{ month: string; year: number }> = this.selectedMonthYearSubject.asObservable();
 
   constructor(private storageService: StorageService) {
     this.loadBudgetData();
@@ -30,11 +35,8 @@ export class BudgetDataService {
     if (data) {
       this.budgetDataSubject.next(data);
     } else {
-      // Start with empty budget data - user will add their own
+      // Initialize with current month/year
       const defaultData: BudgetData = {
-        savings: 0,
-        paycheck: 0,
-        bonus: 0,
         month: new Date().toLocaleString('en-US', { month: 'long' }),
         year: new Date().getFullYear()
       };
@@ -128,6 +130,16 @@ export class BudgetDataService {
       const matchesType = type ? transaction.type === type : true;
       return matchesDate && matchesType;
     });
+  }
+
+  setSelectedMonthYear(month: string, year: number): void {
+    this.selectedMonthYearSubject.next({ month, year });
+    // Update budget data to match selected month/year
+    this.saveBudgetData({ month, year });
+  }
+
+  getSelectedMonthYear(): { month: string; year: number } {
+    return this.selectedMonthYearSubject.value;
   }
 }
 

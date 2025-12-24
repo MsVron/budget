@@ -1,0 +1,14 @@
+<div class="month-year-selector">
+  <ion-button fill="clear" size="small" (click)="previousMonth()" class="nav-button">
+    <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+  </ion-button>
+  
+  <div class="month-year-display">
+    <span class="month-year-text">{{ displayText }}</span>
+  </div>
+  
+  <ion-button fill="clear" size="small" (click)="nextMonth()" class="nav-button">
+    <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</div>
+

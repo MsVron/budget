@@ -41,6 +41,12 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadWeeklyData();
       });
+
+    this.budgetDataService.selectedMonthYear$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadWeeklyData();
+      });
   }
 
   ngOnDestroy() {
@@ -73,5 +79,17 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
 
   get hasWeeklyData(): boolean {
     return this.weeklyData.weeks.length > 0;
+  }
+
+  get currentMonth(): string {
+    return this.budgetDataService.getBudgetData()?.month || new Date().toLocaleString('en-US', { month: 'long' });
+  }
+
+  get currentYear(): number {
+    return this.budgetDataService.getBudgetData()?.year || new Date().getFullYear();
+  }
+
+  onMonthYearChange(event: { month: string; year: number }) {
+    this.budgetDataService.setSelectedMonthYear(event.month, event.year);
   }
 }

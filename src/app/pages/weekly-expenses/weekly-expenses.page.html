@@ -6,6 +6,13 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="weekly-expenses-container">
+    <div class="month-selector-wrapper">
+      <app-month-year-selector
+        [currentMonth]="currentMonth"
+        [currentYear]="currentYear"
+        (monthYearChange)="onMonthYearChange($event)">
+      </app-month-year-selector>
+    </div>
     <div *ngIf="!hasWeeklyData" class="empty-state">
       <ion-icon name="calendar-outline" class="empty-icon"></ion-icon>
       <p class="empty-text">No expenses recorded yet</p>
@@ -25,8 +32,7 @@
         </div>
 
         <div class="categories-list">
-          <div *ngFor="let category of week.categories" class="category-row">
-            <div class="category-color-dot" [style.background-color]="category.color"></div>
+          <div *ngFor="let category of week.categories" class="category-row" [style.background-color]="category.color">
             <span class="category-name">{{ category.category }}</span>
             <span class="category-amount">{{ formatCurrency(category.amount) }}</span>
           </div>

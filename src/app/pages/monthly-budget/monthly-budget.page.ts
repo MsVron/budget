@@ -48,6 +48,12 @@ export class MonthlyBudgetPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.updateSummary();
       });
+
+    this.budgetDataService.selectedMonthYear$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateSummary();
+      });
   }
 
   ngOnDestroy() {
@@ -88,6 +94,10 @@ export class MonthlyBudgetPage implements OnInit, OnDestroy {
   }
 
   get currentYear(): number {
-    return this.budgetData?.year || 2025;
+    return this.budgetData?.year || new Date().getFullYear();
+  }
+
+  onMonthYearChange(event: { month: string; year: number }) {
+    this.budgetDataService.setSelectedMonthYear(event.month, event.year);
   }
 }

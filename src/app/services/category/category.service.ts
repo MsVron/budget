@@ -23,19 +23,19 @@ export class CategoryService {
     { id: '4', name: 'Entertainment', type: 'expense', color: '#9436FF', isDefault: true },
     { id: '5', name: 'Bills & Utilities', type: 'expense', color: '#3675FF', isDefault: true },
     { id: '6', name: 'Healthcare', type: 'expense', color: '#FFBF36', isDefault: true },
-    { id: '7', name: 'Education', type: 'expense', color: '#00BFA5', isDefault: true },
-    { id: '8', name: 'Personal Care', type: 'expense', color: '#A8D900', isDefault: true },
-    { id: '9', name: 'Home', type: 'expense', color: '#00897B', isDefault: true },
-    { id: '10', name: 'Other', type: 'expense', color: '#795548', isDefault: true }
+    { id: '7', name: 'Education', type: 'expense', color: '#36FF6B', isDefault: true },
+    { id: '8', name: 'Personal Care', type: 'expense', color: '#C3FF36', isDefault: true },
+    { id: '9', name: 'Home', type: 'expense', color: '#2B4F46', isDefault: true },
+    { id: '10', name: 'Other', type: 'expense', color: '#4F2B2B', isDefault: true }
   ];
 
   private defaultIncomeCategories: Category[] = [
-    { id: '11', name: 'Salary', type: 'income', color: '#4CAF50', isDefault: true },
+    { id: '11', name: 'Salary', type: 'income', color: '#61FF36', isDefault: true },
     { id: '12', name: 'Freelance', type: 'income', color: '#36B5FF', isDefault: true },
-    { id: '13', name: 'Bonus', type: 'income', color: '#FFC107', isDefault: true },
-    { id: '14', name: 'Investment', type: 'income', color: '#5C6BC0', isDefault: true },
+    { id: '13', name: 'Bonus', type: 'income', color: '#CDFF36', isDefault: true },
+    { id: '14', name: 'Investment', type: 'income', color: '#2B314F', isDefault: true },
     { id: '15', name: 'Gift', type: 'income', color: '#FF3679', isDefault: true },
-    { id: '16', name: 'Other', type: 'income', color: '#8D6E63', isDefault: true }
+    { id: '16', name: 'Other', type: 'income', color: '#4F3F2B', isDefault: true }
   ];
 
   private categoriesSubject = new BehaviorSubject<Category[]>([]);
@@ -155,9 +155,9 @@ export class CategoryService {
   // Predefined color palette for new categories
   getColorPalette(): string[] {
     return [
-      '#FF3636', '#FF3679', '#36B5FF', '#A8D900', '#4CAF50',
-      '#00BFA5', '#3675FF', '#9436FF', '#FFBF36', '#FFC107',
-      '#795548', '#8D6E63', '#689F38', '#00897B', '#5C6BC0'
+      '#FF3636', '#FF3679', '#36B5FF', '#C3FF36', '#61FF36',
+      '#36FF6B', '#3675FF', '#9436FF', '#FFBF36', '#CDFF36',
+      '#4F2B2B', '#4F3F2B', '#344F2B', '#2B4F46', '#2B314F'
     ];
   }
 }

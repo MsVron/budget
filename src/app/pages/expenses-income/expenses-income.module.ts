@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ExpensesIncomePageRoutingModule } from './expenses-income-routing.module';
+import { SetPlannedBudgetModalModule } from '@shared/modals/set-planned-budget-modal/set-planned-budget-modal.module';
+import { MonthYearSelectorModule } from '@shared/components/month-year-selector/month-year-selector.module';
 
 import { ExpensesIncomePage } from './expenses-income.page';
 
@@ -13,7 +15,9 @@ import { ExpensesIncomePage } from './expenses-income.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ExpensesIncomePageRoutingModule
+    ExpensesIncomePageRoutingModule,
+    SetPlannedBudgetModalModule,
+    MonthYearSelectorModule
   ],
   declarations: [ExpensesIncomePage]
 })

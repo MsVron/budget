@@ -1,0 +1,85 @@
+ion-toolbar {
+  --background: var(--color-primary-navy);
+  --color: var(--color-background-white);
+}
+
+ion-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+
+  .section-label {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .category-display {
+    background: var(--color-background-light);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+
+    h2 {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+  }
+
+  .input-item {
+    --background: var(--color-background-light);
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    --inner-padding-end: 0;
+    margin-bottom: 0.5rem;
+
+    ion-input {
+      font-family: "Inter", sans-serif;
+      font-size: 1.125rem;
+      font-weight: 500;
+      --padding-start: 0.5rem;
+    }
+
+    .currency-symbol {
+      font-family: "Inter", sans-serif;
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: var(--color-text-primary);
+    }
+  }
+
+  ion-text small {
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  ion-button {
+    flex: 1;
+    --border-radius: 8px;
+    --padding-top: 0.625rem;
+    --padding-bottom: 0.625rem;
+    height: auto;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+  }
+  
+}
+
+
