@@ -32,8 +32,13 @@ export class MonthlyBudgetService {
     const spentFromTransactions = monthlyExpenseTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
     const spentAmount = spentFromExpenses + spentFromTransactions;
     
+    // End balance = starting balance (total income) - spent amount
     const endBalance = startingBalance - spentAmount;
-    const totalSaved = startingBalance - endBalance;
+    
+    // Total saved = end balance (money we still have)
+    const totalSaved = endBalance;
+    
+    // Savings percentage = percentage of starting balance that we didn't spend
     const savingsPercentage = startingBalance > 0 ? Math.round((totalSaved / startingBalance) * 100) : 0;
 
     return {

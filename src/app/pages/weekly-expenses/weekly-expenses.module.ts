@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { WeeklyExpensesPageRoutingModule } from './weekly-expenses-routing.module';
 import { MonthYearSelectorModule } from '@shared/components/month-year-selector/month-year-selector.module';
+import { WeeklyCategoryEntriesModalModule } from '@shared/modals/weekly-category-entries-modal/weekly-category-entries-modal.module';
 
 import { WeeklyExpensesPage } from './weekly-expenses.page';
 
@@ -15,7 +16,8 @@ import { WeeklyExpensesPage } from './weekly-expenses.page';
     FormsModule,
     IonicModule,
     WeeklyExpensesPageRoutingModule,
-    MonthYearSelectorModule
+    MonthYearSelectorModule,
+    WeeklyCategoryEntriesModalModule
   ],
   declarations: [WeeklyExpensesPage]
 })

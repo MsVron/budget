@@ -81,6 +81,7 @@ export interface WeeklyCategoryExpense {
   category: string;
   amount: number;
   color?: string;
+  entries?: (Transaction | Expense)[];
 }
 
 export interface WeeklyExpenseSummary {

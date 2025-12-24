@@ -135,10 +135,16 @@ ion-header {
   padding: 12px;
   border-radius: 8px;
   transition: all 0.2s ease;
+  cursor: pointer;
 
   &:hover {
     opacity: 0.9;
     transform: translateX(2px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.85;
   }
 
   .category-name {

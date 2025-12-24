@@ -1,0 +1,152 @@
+ion-toolbar {
+  --color: var(--color-background-white);
+}
+
+ion-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  color: white;
+}
+
+ion-button {
+  --color: white;
+}
+
+.week-info-banner {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  .week-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .week-label {
+      font-family: "Inter", sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .week-dates {
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+  }
+
+  .total-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+
+    .total-label {
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .total-value {
+      font-family: "Inter", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+}
+
+.entries-container {
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+
+    .empty-icon {
+      font-size: 72px;
+      color: var(--color-text-light);
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-text {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+  }
+
+  .entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .entry-card {
+      background: var(--color-background-light);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      .entry-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+
+        .entry-date {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: "Inter", sans-serif;
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--color-text-secondary);
+
+          ion-icon {
+            font-size: 14px;
+            color: var(--color-primary-navy);
+          }
+        }
+
+        .entry-description {
+          font-family: "Inter", sans-serif;
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--color-text-primary);
+          word-break: break-word;
+        }
+      }
+
+      .entry-amount {
+        font-family: "Inter", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--color-primary-navy);
+        white-space: nowrap;
+        margin-left: 16px;
+      }
+    }
+  }
+}
+

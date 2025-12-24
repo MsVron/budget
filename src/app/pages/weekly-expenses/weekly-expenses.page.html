@@ -32,7 +32,11 @@
         </div>
 
         <div class="categories-list">
-          <div *ngFor="let category of week.categories" class="category-row" [style.background-color]="category.color">
+          <div 
+            *ngFor="let category of week.categories" 
+            class="category-row" 
+            [style.background-color]="category.color"
+            (click)="onCategoryClick(category, week)">
             <span class="category-name">{{ category.category }}</span>
             <span class="category-amount">{{ formatCurrency(category.amount) }}</span>
           </div>

@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { ModalController } from '@ionic/angular';
 import { BudgetDataService } from '@services/budget/budget-data.service';
 import { WeeklyExpensesService } from '@services/budget/weekly-expenses.service';
-import { WeeklyExpensesData, WeeklyExpenseSummary } from '@models/budget.model';
+import { WeeklyExpensesData, WeeklyExpenseSummary, WeeklyCategoryExpense } from '@models/budget.model';
+import { WeeklyCategoryEntriesModalComponent } from '@shared/modals/weekly-category-entries-modal/weekly-category-entries-modal.component';
 
 @Component({
   selector: 'app-weekly-expenses',
@@ -20,7 +22,8 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
 
   constructor(
     private budgetDataService: BudgetDataService,
-    private weeklyExpensesService: WeeklyExpensesService
+    private weeklyExpensesService: WeeklyExpensesService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -91,5 +94,22 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
 
   onMonthYearChange(event: { month: string; year: number }) {
     this.budgetDataService.setSelectedMonthYear(event.month, event.year);
+  }
+
+  async onCategoryClick(category: WeeklyCategoryExpense, week: WeeklyExpenseSummary) {
+    const modal = await this.modalController.create({
+      component: WeeklyCategoryEntriesModalComponent,
+      componentProps: {
+        categoryName: category.category,
+        categoryColor: category.color || '#95A5A6',
+        weekNumber: week.weekNumber,
+        weekStartDate: week.startDate,
+        weekEndDate: week.endDate,
+        entries: category.entries || []
+      },
+      cssClass: 'weekly-category-entries-modal'
+    });
+
+    await modal.present();
   }
 }

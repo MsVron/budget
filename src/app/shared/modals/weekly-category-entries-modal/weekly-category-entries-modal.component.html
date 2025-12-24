@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar [style.--background]="categoryColor">
+    <ion-title>{{ categoryName }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="week-info-banner" [style.background-color]="categoryColor">
+    <div class="week-details">
+      <span class="week-label">Week {{ weekNumber }}</span>
+      <span class="week-dates">{{ formatDateRange() }}</span>
+    </div>
+    <div class="total-amount">
+      <span class="total-label">Total</span>
+      <span class="total-value">{{ formatCurrency(getTotalAmount()) }}</span>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="entries-container">
+    <div *ngIf="displayEntries.length === 0" class="empty-state">
+      <ion-icon name="receipt-outline" class="empty-icon"></ion-icon>
+      <p class="empty-text">No entries found</p>
+    </div>
+
+    <div *ngIf="displayEntries.length > 0" class="entries-list">
+      <div *ngFor="let entry of displayEntries" class="entry-card">
+        <div class="entry-content">
+          <div class="entry-date">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ formatDate(entry.date) }}</span>
+          </div>
+          <div class="entry-description">{{ entry.description }}</div>
+        </div>
+        <div class="entry-amount">{{ formatCurrency(entry.amount) }}</div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

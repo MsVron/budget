@@ -58,7 +58,7 @@ export class WeeklyExpensesService {
     const weeks: WeeklyExpenseSummary[] = [];
     
     weeklyExpensesMap.forEach((items, weekNumber) => {
-      const categoriesMap = new Map<string, { amount: number; color: string }>();
+      const categoriesMap = new Map<string, { amount: number; color: string; entries: Array<Expense | Transaction> }>();
       
       items.forEach(item => {
         const category = item.category;
@@ -73,15 +73,17 @@ export class WeeklyExpensesService {
         }
         
         if (!categoriesMap.has(category)) {
-          categoriesMap.set(category, { amount: 0, color });
+          categoriesMap.set(category, { amount: 0, color, entries: [] });
         }
         categoriesMap.get(category)!.amount += item.amount;
+        categoriesMap.get(category)!.entries.push(item);
       });
 
       const categories: WeeklyCategoryExpense[] = Array.from(categoriesMap.entries()).map(([category, data]) => ({
         category,
         amount: data.amount,
-        color: data.color
+        color: data.color,
+        entries: data.entries
       }));
 
       const totalSpent = categories.reduce((sum, cat) => sum + cat.amount, 0);
