@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoryService, Category } from '../../../services/category.service';
+import { CategoryService, Category } from '@services/category/category.service';
 
 export interface TransactionData {
   type: 'expense' | 'income';

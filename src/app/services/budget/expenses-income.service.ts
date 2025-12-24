@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BudgetDataService } from '@services/budget-data';
+import { BudgetDataService } from './budget-data.service';
 import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
 
 @Injectable({

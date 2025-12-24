@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { StorageService } from '@services/storage';
+import { StorageService } from '../core/storage.service';
 import { BudgetData, Expense } from '@models/budget.model';
 
 @Injectable({

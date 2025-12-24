@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { BudgetDataService } from '@services/budget-data';
-import { WeeklyExpensesService } from '@services/weekly-expenses';
+import { BudgetDataService } from '@services/budget/budget-data.service';
+import { WeeklyExpensesService } from '@services/budget/weekly-expenses.service';
 import { WeeklyExpensesData, WeeklyExpenseSummary } from '@models/budget.model';
 
 @Component({
