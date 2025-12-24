@@ -7,19 +7,9 @@ import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/bud
   providedIn: 'root',
 })
 export class ExpensesIncomeService {
-  private readonly categoryBudgets: { [key: string]: { planned: number; color?: string } } = {
-    'Food': { planned: 266.50, color: '#FF6B35' },
-    'Transportation': { planned: 350.00, color: '#2C3E50' },
-    'Self-Care': { planned: 330.00, color: '#FF3B30' },
-    'Hygiene': { planned: 88.00, color: '#4CAF50' },
-    'Phone': { planned: 49.00, color: '#2C3E50' }
-  };
+  private readonly categoryBudgets: { [key: string]: { planned: number; color?: string } } = {};
 
-  private readonly incomeBudgets: { [key: string]: number } = {
-    'Savings': 458.00,
-    'Paycheck': 700.00,
-    'Bonus': 0.00
-  };
+  private readonly incomeBudgets: { [key: string]: number } = {};
 
   constructor(
     private budgetDataService: BudgetDataService,
