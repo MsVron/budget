@@ -30,12 +30,13 @@ export class BudgetDataService {
     if (data) {
       this.budgetDataSubject.next(data);
     } else {
+      // Start with empty budget data - user will add their own
       const defaultData: BudgetData = {
-        savings: 916.00,
-        paycheck: 1200.00,
-        bonus: 300.00,
-        month: 'August',
-        year: 2025
+        savings: 0,
+        paycheck: 0,
+        bonus: 0,
+        month: new Date().toLocaleString('en-US', { month: 'long' }),
+        year: new Date().getFullYear()
       };
       await this.saveBudgetData(defaultData);
     }
@@ -46,15 +47,8 @@ export class BudgetDataService {
     if (expenses && expenses.length > 0) {
       this.expensesSubject.next(expenses);
     } else {
-      const sampleExpenses: Expense[] = [
-        { id: '1', type: 'expense', amount: 147.15, category: 'Food', categoryColor: '#FF6B35', description: 'Groceries', date: new Date('2025-08-05') },
-        { id: '2', type: 'expense', amount: 160.00, category: 'Transportation', categoryColor: '#2C3E50', description: 'Gas and parking', date: new Date('2025-08-10') },
-        { id: '3', type: 'expense', amount: 519.00, category: 'Self-Care', categoryColor: '#FF3B30', description: 'Spa and wellness', date: new Date('2025-08-12') },
-        { id: '4', type: 'expense', amount: 0.00, category: 'Hygiene', categoryColor: '#4CAF50', description: 'Personal care', date: new Date('2025-08-15') },
-        { id: '5', type: 'expense', amount: 49.00, category: 'Phone', categoryColor: '#2C3E50', description: 'Mobile bill', date: new Date('2025-08-20') }
-      ];
-      await this.storageService.set(this.EXPENSES_KEY, sampleExpenses);
-      this.expensesSubject.next(sampleExpenses);
+      // Start with empty expenses - user will add their own
+      this.expensesSubject.next([]);
     }
   }
 
