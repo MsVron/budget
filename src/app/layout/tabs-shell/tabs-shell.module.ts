@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsShellComponent } from './tabs-shell.component';
+import { AddTransactionModalModule } from '../../shared/modals/add-transaction-modal/add-transaction-modal.module';
 
 const routes: Routes = [
   {
@@ -39,8 +40,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AddTransactionModalModule
   ]
 })
 export class TabsShellModule { }
-
