@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { BudgetService } from '@services/budget';
+import { BudgetDataService } from '@services/budget-data';
+import { MonthlyBudgetService } from '@services/monthly-budget';
 import { BudgetData, MonthlyBudgetSummary } from '@models/budget.model';
 
 @Component({
@@ -23,17 +24,20 @@ export class MonthlyBudgetPage implements OnInit, OnDestroy {
   
   private destroy$ = new Subject<void>();
 
-  constructor(private budgetService: BudgetService) { }
+  constructor(
+    private budgetDataService: BudgetDataService,
+    private monthlyBudgetService: MonthlyBudgetService
+  ) { }
 
   ngOnInit() {
-    this.budgetService.budgetData$
+    this.budgetDataService.budgetData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.budgetData = data;
         this.updateSummary();
       });
 
-    this.budgetService.expenses$
+    this.budgetDataService.expenses$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSummary();
@@ -46,7 +50,7 @@ export class MonthlyBudgetPage implements OnInit, OnDestroy {
   }
 
   updateSummary() {
-    this.summary = this.budgetService.calculateMonthlySummary();
+    this.summary = this.monthlyBudgetService.calculateMonthlySummary();
   }
 
   getBarHeight(amount: number): number {

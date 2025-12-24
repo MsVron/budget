@@ -1,84 +1,42 @@
 <ion-header [translucent]="true">
-    <!-- <ion-toolbar color="primary">
-      <ion-title>Weekly Expenses</ion-title>
-    </ion-toolbar> -->
+  <ion-toolbar>
+    <ion-title>Weekly Expenses</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- <ion-card>
-    <ion-card-header>
-      <ion-card-title>Week of August 18-24, 2025</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="weekly-summary">
-        <div class="summary-item">
-          <h3>Total Spent This Week</h3>
-          <p class="amount">$325.50</p>
+  <div class="weekly-expenses-container">
+    <div *ngIf="!hasWeeklyData" class="empty-state">
+      <ion-icon name="calendar-outline" class="empty-icon"></ion-icon>
+      <p class="empty-text">No expenses recorded yet</p>
+      <p class="empty-subtext">Add expenses to see weekly breakdown</p>
+    </div>
+
+    <div *ngIf="hasWeeklyData" class="weeks-list">
+      <div *ngFor="let week of weeklyData.weeks" class="week-section">
+        <div class="week-header">
+          <div class="week-info">
+            <h2 class="week-title">Week {{ week.weekNumber }}</h2>
+            <p class="week-dates">{{ formatDateRange(week) }}</p>
+          </div>
+          <div class="week-percentage">
+            <span class="percentage-value">{{ formatPercentage(week.percentageOfMonthlyBudget) }}</span>
+          </div>
         </div>
-        <div class="summary-item">
-          <h3>Average Daily Spend</h3>
-          <p class="amount">$46.50</p>
+
+        <div class="categories-list">
+          <div *ngFor="let category of week.categories" class="category-row">
+            <div class="category-color-dot" [style.background-color]="category.color"></div>
+            <span class="category-name">{{ category.category }}</span>
+            <span class="category-amount">{{ formatCurrency(category.amount) }}</span>
+          </div>
+        </div>
+
+        <div class="week-total">
+          <span class="total-label">Week Total</span>
+          <span class="total-amount">{{ formatCurrency(week.totalSpent) }}</span>
         </div>
       </div>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Daily Breakdown</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-label>
-            <h2>Monday</h2>
-            <p>3 transactions</p>
-          </ion-label>
-          <ion-text color="danger" slot="end">
-            <strong>$65.00</strong>
-          </ion-text>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>
-            <h2>Tuesday</h2>
-            <p>2 transactions</p>
-          </ion-label>
-          <ion-text color="danger" slot="end">
-            <strong>$42.50</strong>
-          </ion-text>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>
-            <h2>Wednesday</h2>
-            <p>4 transactions</p>
-          </ion-label>
-          <ion-text color="danger" slot="end">
-            <strong>$88.00</strong>
-          </ion-text>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>
-            <h2>Thursday</h2>
-            <p>2 transactions</p>
-          </ion-label>
-          <ion-text color="danger" slot="end">
-            <strong>$55.00</strong>
-          </ion-text>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>
-            <h2>Friday</h2>
-            <p>3 transactions</p>
-          </ion-label>
-          <ion-text color="danger" slot="end">
-            <strong>$75.00</strong>
-          </ion-text>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card> -->
+    </div>
+  </div>
 </ion-content>

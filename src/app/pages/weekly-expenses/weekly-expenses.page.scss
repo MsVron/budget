@@ -1,14 +1,262 @@
 ion-content {
-  --background: #FFFFFF;
+  --background: var(--color-background-white);
 }
 
-ion-toolbar {
-  --background: #2C3E50;
-  --color: #FFFFFF;
+ion-header {
+  ion-toolbar {
+    --background: var(--color-background-white);
+    --border-width: 0;
+    --min-height: 60px;
+    padding-top: 16px;
+
+    ion-title {
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--color-primary-navy);
+      text-align: center;
+    }
+  }
 }
 
-ion-title {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
+.weekly-expenses-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 80px;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+
+  .empty-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+  }
+
+  .empty-subtext {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+}
+
+.weeks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.week-section {
+  background: var(--color-background-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--color-primary-navy);
+  border-bottom: 3px solid var(--color-primary-orange);
+
+  .week-info {
+    flex: 1;
+
+    .week-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-background-white);
+      margin: 0 0 4px 0;
+    }
+
+    .week-dates {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+  }
+
+  .week-percentage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-warning);
+    border-radius: 8px;
+    padding: 8px 16px;
+    min-width: 80px;
+
+    .percentage-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+    }
+  }
+}
+
+.categories-list {
+  padding: 16px 20px;
+  background: var(--color-background-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: var(--color-background-white);
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateX(4px);
+  }
+
+  .category-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .category-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .category-amount {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+}
+
+.week-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--color-background-white);
+  border-top: 2px solid var(--color-background-light);
+
+  .total-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .total-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary-navy);
+  }
+}
+
+@media (max-width: 480px) {
+  .weekly-expenses-container {
+    padding: 16px 0;
+  }
+
+  .empty-state {
+    padding: 60px 20px;
+
+    .empty-icon {
+      font-size: 64px;
+    }
+
+    .empty-text {
+      font-size: 16px;
+    }
+
+    .empty-subtext {
+      font-size: 13px;
+    }
+  }
+
+  .weeks-list {
+    gap: 20px;
+  }
+
+  .week-header {
+    padding: 14px 16px;
+
+    .week-info {
+      .week-title {
+        font-size: 16px;
+      }
+
+      .week-dates {
+        font-size: 12px;
+      }
+    }
+
+    .week-percentage {
+      padding: 6px 12px;
+      min-width: 70px;
+
+      .percentage-value {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .categories-list {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .category-row {
+    padding: 10px;
+
+    .category-color-dot {
+      width: 10px;
+      height: 10px;
+      margin-right: 10px;
+    }
+
+    .category-name {
+      font-size: 14px;
+    }
+
+    .category-amount {
+      font-size: 14px;
+    }
+  }
+
+  .week-total {
+    padding: 14px 16px;
+
+    .total-label {
+      font-size: 15px;
+    }
+
+    .total-amount {
+      font-size: 16px;
+    }
+  }
+}

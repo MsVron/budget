@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StorageService } from '@services/storage';
-import { BudgetData, Expense, MonthlyBudgetSummary, ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
+import { BudgetData, Expense } from '@models/budget.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BudgetService {
+export class BudgetDataService {
   private readonly BUDGET_KEY = 'budgetData';
   private readonly EXPENSES_KEY = 'expenses';
 
@@ -97,105 +97,5 @@ export class BudgetService {
       return expenseMonth === month && expenseDate.getFullYear() === year;
     });
   }
-
-  calculateMonthlySummary(): MonthlyBudgetSummary {
-    const budgetData = this.budgetDataSubject.value;
-    if (!budgetData) {
-      return {
-        startingBalance: 0,
-        endBalance: 0,
-        spentAmount: 0,
-        savingsPercentage: 0,
-        totalSaved: 0
-      };
-    }
-
-    const startingBalance = budgetData.savings + budgetData.paycheck + budgetData.bonus;
-    const monthlyExpenses = this.getMonthlyExpenses(budgetData.month, budgetData.year);
-    const spentAmount = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const endBalance = startingBalance - spentAmount;
-    const totalSaved = startingBalance - endBalance;
-    const savingsPercentage = startingBalance > 0 ? Math.round((totalSaved / startingBalance) * 100) : 0;
-
-    return {
-      startingBalance,
-      endBalance,
-      spentAmount,
-      savingsPercentage,
-      totalSaved
-    };
-  }
-
-  getExpensesIncomeSummary(): ExpensesIncomeSummary {
-    const budgetData = this.budgetDataSubject.value;
-    
-    const categoryBudgets: { [key: string]: { planned: number; color?: string } } = {
-      'Food': { planned: 266.50, color: '#FF6B35' },
-      'Transportation': { planned: 350.00, color: '#2C3E50' },
-      'Self-Care': { planned: 330.00, color: '#FF3B30' },
-      'Hygiene': { planned: 88.00, color: '#4CAF50' },
-      'Phone': { planned: 49.00, color: '#2C3E50' }
-    };
-
-    const incomeBudgets: { [key: string]: number } = {
-      'Savings': 458.00,
-      'Paycheck': 700.00,
-      'Bonus': 0.00
-    };
-
-    const monthlyExpenses = budgetData 
-      ? this.getMonthlyExpenses(budgetData.month, budgetData.year)
-      : [];
-
-    const expensesByCategory: { [key: string]: number } = {};
-    monthlyExpenses.forEach(expense => {
-      expensesByCategory[expense.category] = (expensesByCategory[expense.category] || 0) + expense.amount;
-    });
-
-    const expenseCategories: CategoryBudget[] = Object.keys(categoryBudgets).map(category => ({
-      category,
-      planned: categoryBudgets[category].planned,
-      actual: expensesByCategory[category] || 0,
-      color: categoryBudgets[category].color
-    }));
-
-    const totalExpensesPlanned = expenseCategories.reduce((sum, cat) => sum + cat.planned, 0);
-    const totalExpensesActual = expenseCategories.reduce((sum, cat) => sum + cat.actual, 0);
-
-    const incomeSources: IncomeBudget[] = [
-      {
-        source: 'Savings',
-        planned: incomeBudgets['Savings'],
-        actual: budgetData?.savings || 0
-      },
-      {
-        source: 'Paycheck',
-        planned: incomeBudgets['Paycheck'],
-        actual: budgetData?.paycheck || 0
-      },
-      {
-        source: 'Bonus',
-        planned: incomeBudgets['Bonus'],
-        actual: budgetData?.bonus || 0
-      }
-    ];
-
-    const totalIncomePlanned = incomeSources.reduce((sum, src) => sum + src.planned, 0);
-    const totalIncomeActual = incomeSources.reduce((sum, src) => sum + src.actual, 0);
-
-    return {
-      expenses: {
-        categories: expenseCategories,
-        totalPlanned: totalExpensesPlanned,
-        totalActual: totalExpensesActual,
-        difference: totalExpensesPlanned - totalExpensesActual
-      },
-      income: {
-        sources: incomeSources,
-        totalPlanned: totalIncomePlanned,
-        totalActual: totalIncomeActual,
-        difference: totalIncomeActual - totalIncomePlanned
-      }
-    };
-  }
 }
+

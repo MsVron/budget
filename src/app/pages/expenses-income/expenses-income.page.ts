@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { BudgetService } from '@services/budget';
+import { BudgetDataService } from '@services/budget-data';
+import { ExpensesIncomeService } from '@services/expenses-income';
 import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
 
 @Component({
@@ -28,16 +29,19 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private budgetService: BudgetService) { }
+  constructor(
+    private budgetDataService: BudgetDataService,
+    private expensesIncomeService: ExpensesIncomeService
+  ) { }
 
   ngOnInit() {
-    this.budgetService.budgetData$
+    this.budgetDataService.budgetData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSummary();
       });
 
-    this.budgetService.expenses$
+    this.budgetDataService.expenses$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.updateSummary();
@@ -50,7 +54,7 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
   }
 
   updateSummary() {
-    this.summary = this.budgetService.getExpensesIncomeSummary();
+    this.summary = this.expensesIncomeService.getExpensesIncomeSummary();
     this.summary.expenses.categories.forEach(cat => cat.expanded = false);
     this.summary.income.sources.forEach(src => src.expanded = false);
   }

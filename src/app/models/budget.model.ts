@@ -51,3 +51,23 @@ export interface ExpensesIncomeSummary {
     difference: number;
   };
 }
+
+export interface WeeklyCategoryExpense {
+  category: string;
+  amount: number;
+  color?: string;
+}
+
+export interface WeeklyExpenseSummary {
+  weekNumber: number;
+  startDate: Date;
+  endDate: Date;
+  categories: WeeklyCategoryExpense[];
+  totalSpent: number;
+  percentageOfMonthlyBudget: number;
+}
+
+export interface WeeklyExpensesData {
+  weeks: WeeklyExpenseSummary[];
+  monthlyPlannedExpenses: number;
+}
