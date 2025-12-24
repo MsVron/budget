@@ -220,6 +220,19 @@ ion-header {
           background: #FFE5E5;
         }
 
+        &.clickable {
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background: #FFD5D5;
+          }
+
+          &:active {
+            background: #FFC5C5;
+          }
+        }
+
         &.diff-row {
           background: var(--color-background-white);
           border-top: 2px solid var(--color-background-light);
@@ -235,29 +248,6 @@ ion-header {
           font-size: 14px;
           font-weight: 500;
           color: var(--color-text-primary);
-        }
-
-        .amount-with-button {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-
-          .amount-value {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--color-text-primary);
-          }
-
-          ion-button {
-            --padding-start: 4px;
-            --padding-end: 4px;
-            height: 24px;
-            margin: 0;
-
-            ion-icon {
-              font-size: 16px;
-            }
-          }
         }
 
         .diff-value {
@@ -333,6 +323,19 @@ ion-header {
         &.planned-row,
         &.actual-row {
           background: #FFE5E5;
+        }
+
+        &.clickable {
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background: #FFD5D5;
+          }
+
+          &:active {
+            background: #FFC5C5;
+          }
         }
 
         &.diff-row {

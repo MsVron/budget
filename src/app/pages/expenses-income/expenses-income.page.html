@@ -66,14 +66,9 @@
             <ion-icon [name]="category.expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon"></ion-icon>
           </div>
           <div class="card-content" *ngIf="category.expanded">
-            <div class="amount-row planned-row">
+            <div class="amount-row planned-row clickable" (click)="setPlannedBudget(category.category, 'expense', category.planned); $event.stopPropagation()">
               <span class="amount-label">Planned</span>
-              <div class="amount-with-button">
-                <span class="amount-value">{{ formatCurrency(category.planned) }}</span>
-                <ion-button fill="clear" size="small" (click)="setPlannedBudget(category.category, 'expense', category.planned); $event.stopPropagation()">
-                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-                </ion-button>
-              </div>
+              <span class="amount-value">{{ formatCurrency(category.planned) }}</span>
             </div>
             <div class="amount-row actual-row">
               <span class="amount-label">Actual</span>
@@ -143,14 +138,9 @@
             <ion-icon [name]="source.expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon"></ion-icon>
           </div>
           <div class="card-content" *ngIf="source.expanded">
-            <div class="amount-row planned-row">
+            <div class="amount-row planned-row clickable" (click)="setPlannedBudget(source.source, 'income', source.planned); $event.stopPropagation()">
               <span class="amount-label">Planned</span>
-              <div class="amount-with-button">
-                <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
-                <ion-button fill="clear" size="small" (click)="setPlannedBudget(source.source, 'income', source.planned); $event.stopPropagation()">
-                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-                </ion-button>
-              </div>
+              <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
             </div>
             <div class="amount-row actual-row">
               <span class="amount-label">Actual</span>
