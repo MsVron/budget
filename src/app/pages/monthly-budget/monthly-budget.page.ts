@@ -42,6 +42,12 @@ export class MonthlyBudgetPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.updateSummary();
       });
+
+    this.budgetDataService.transactions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateSummary();
+      });
   }
 
   ngOnDestroy() {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BudgetDataService } from './budget-data.service';
-import { WeeklyExpensesData, WeeklyExpenseSummary, WeeklyCategoryExpense, Expense } from '@models/budget.model';
+import { CategoryService } from '../category/category.service';
+import { WeeklyExpensesData, WeeklyExpenseSummary, WeeklyCategoryExpense, Expense, Transaction } from '@models/budget.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,10 @@ export class WeeklyExpensesService {
     'Phone': { planned: 49.00, color: '#2C3E50' }
   };
 
-  constructor(private budgetDataService: BudgetDataService) {}
+  constructor(
+    private budgetDataService: BudgetDataService,
+    private categoryService: CategoryService
+  ) {}
 
   getWeeklyExpensesData(): WeeklyExpensesData {
     const budgetData = this.budgetDataService.getBudgetData();
@@ -28,10 +32,24 @@ export class WeeklyExpensesService {
       };
     }
 
+    // Get both transactions and legacy expenses
+    const monthlyTransactions = this.budgetDataService.getMonthlyTransactions(budgetData.month, budgetData.year, 'expense');
     const monthlyExpenses = this.budgetDataService.getMonthlyExpenses(budgetData.month, budgetData.year);
     
-    const weeklyExpensesMap = new Map<number, Expense[]>();
+    const weeklyExpensesMap = new Map<number, Array<Expense | Transaction>>();
     
+    // Process new transactions
+    monthlyTransactions.forEach(transaction => {
+      const transactionDate = new Date(transaction.date);
+      const weekNumber = this.getWeekOfMonth(transactionDate);
+      
+      if (!weeklyExpensesMap.has(weekNumber)) {
+        weeklyExpensesMap.set(weekNumber, []);
+      }
+      weeklyExpensesMap.get(weekNumber)!.push(transaction);
+    });
+
+    // Process legacy expenses
     monthlyExpenses.forEach(expense => {
       const expenseDate = new Date(expense.date);
       const weekNumber = this.getWeekOfMonth(expenseDate);
@@ -44,18 +62,31 @@ export class WeeklyExpensesService {
 
     const weeks: WeeklyExpenseSummary[] = [];
     
-    weeklyExpensesMap.forEach((expenses, weekNumber) => {
-      const categoriesMap = new Map<string, number>();
+    weeklyExpensesMap.forEach((items, weekNumber) => {
+      const categoriesMap = new Map<string, { amount: number; color: string }>();
       
-      expenses.forEach(expense => {
-        const currentAmount = categoriesMap.get(expense.category) || 0;
-        categoriesMap.set(expense.category, currentAmount + expense.amount);
+      items.forEach(item => {
+        const category = item.category;
+        let color: string;
+        
+        // Get color from transaction or expense
+        if ('categoryColor' in item && item.categoryColor) {
+          color = item.categoryColor;
+        } else {
+          const categoryFromService = this.categoryService.getCategoryByName(category, 'expense');
+          color = categoryFromService?.color || this.categoryBudgets[category]?.color || '#95A5A6';
+        }
+        
+        if (!categoriesMap.has(category)) {
+          categoriesMap.set(category, { amount: 0, color });
+        }
+        categoriesMap.get(category)!.amount += item.amount;
       });
 
-      const categories: WeeklyCategoryExpense[] = Array.from(categoriesMap.entries()).map(([category, amount]) => ({
+      const categories: WeeklyCategoryExpense[] = Array.from(categoriesMap.entries()).map(([category, data]) => ({
         category,
-        amount,
-        color: this.categoryBudgets[category]?.color || '#2C3E50'
+        amount: data.amount,
+        color: data.color
       }));
 
       const totalSpent = categories.reduce((sum, cat) => sum + cat.amount, 0);

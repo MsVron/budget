@@ -52,3 +52,12 @@ body {
 ion-content {
   --background: var(--color-background-white);
 }
+
+// Modal styling
+.add-transaction-modal {
+  --backdrop-opacity: 0.6;
+  
+  ion-modal {
+    --border-radius: 16px 16px 0 0;
+  }
+}

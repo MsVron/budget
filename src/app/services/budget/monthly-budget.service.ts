@@ -20,9 +20,19 @@ export class MonthlyBudgetService {
       };
     }
 
-    const startingBalance = budgetData.savings + budgetData.paycheck + budgetData.bonus;
+    // Calculate starting balance from budget data and income transactions
+    const monthlyIncomeTransactions = this.budgetDataService.getMonthlyTransactions(budgetData.month, budgetData.year, 'income');
+    const incomeFromTransactions = monthlyIncomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+    const startingBalance = budgetData.savings + budgetData.paycheck + budgetData.bonus + incomeFromTransactions;
+    
+    // Calculate total spent from both legacy expenses and new expense transactions
     const monthlyExpenses = this.budgetDataService.getMonthlyExpenses(budgetData.month, budgetData.year);
-    const spentAmount = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+    const monthlyExpenseTransactions = this.budgetDataService.getMonthlyTransactions(budgetData.month, budgetData.year, 'expense');
+    
+    const spentFromExpenses = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+    const spentFromTransactions = monthlyExpenseTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+    const spentAmount = spentFromExpenses + spentFromTransactions;
+    
     const endBalance = startingBalance - spentAmount;
     const totalSaved = startingBalance - endBalance;
     const savingsPercentage = startingBalance > 0 ? Math.round((totalSaved / startingBalance) * 100) : 0;

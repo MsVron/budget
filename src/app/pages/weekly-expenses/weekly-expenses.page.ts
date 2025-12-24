@@ -35,6 +35,12 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadWeeklyData();
       });
+
+    this.budgetDataService.transactions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadWeeklyData();
+      });
   }
 
   ngOnDestroy() {

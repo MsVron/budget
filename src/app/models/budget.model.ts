@@ -6,10 +6,29 @@ export interface BudgetData {
   year: number;
 }
 
-export interface Expense {
+export interface Transaction {
   id: string;
+  type: 'expense' | 'income';
   amount: number;
   category: string;
+  categoryColor: string;
+  description: string;
+  date: Date;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  type: 'expense' | 'income';
+  color: string;
+}
+
+export interface Expense {
+  id: string;
+  type: 'expense' | 'income';
+  amount: number;
+  category: string;
+  categoryColor?: string;
   description: string;
   date: Date;
 }
