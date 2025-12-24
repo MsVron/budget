@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService, Category } from '@services/category/category.service';
@@ -19,6 +19,9 @@ export interface TransactionData {
   standalone: false
 })
 export class AddTransactionModalComponent implements OnInit {
+  @Input() editMode: boolean = false;
+  @Input() editData?: TransactionData & { id: string };
+  
   transactionForm: FormGroup;
   newCategoryForm: FormGroup;
   transactionType: 'expense' | 'income' = 'expense';
@@ -55,13 +58,30 @@ export class AddTransactionModalComponent implements OnInit {
   ngOnInit() {
     this.colorPalette = this.categoryService.getColorPalette();
     this.selectedNewCategoryColor = this.colorPalette[0];
+    
+    // If in edit mode, populate the form with existing data
+    if (this.editMode && this.editData) {
+      this.transactionType = this.editData.type;
+      this.selectedCategoryColor = this.editData.categoryColor;
+      
+      this.transactionForm.patchValue({
+        type: this.editData.type,
+        category: this.editData.category,
+        amount: this.editData.amount,
+        date: new Date(this.editData.date).toISOString(),
+        description: this.editData.description || ''
+      });
+    }
+    
     this.loadCategories();
     this.loadAvailableDefaults();
     
     // Listen to type changes to reset category
     this.transactionForm.get('type')?.valueChanges.subscribe(type => {
       this.transactionType = type;
-      this.transactionForm.patchValue({ category: '' });
+      if (!this.editMode) {
+        this.transactionForm.patchValue({ category: '' });
+      }
       this.loadCategories();
       this.loadAvailableDefaults();
     });

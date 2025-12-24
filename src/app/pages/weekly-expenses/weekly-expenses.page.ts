@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { BudgetDataService } from '@services/budget/budget-data.service';
 import { WeeklyExpensesService } from '@services/budget/weekly-expenses.service';
-import { WeeklyExpensesData, WeeklyExpenseSummary, WeeklyCategoryExpense } from '@models/budget.model';
+import { WeeklyExpensesData, WeeklyExpenseSummary, WeeklyCategoryExpense, Transaction, Expense } from '@models/budget.model';
 import { WeeklyCategoryEntriesModalComponent } from '@shared/modals/weekly-category-entries-modal/weekly-category-entries-modal.component';
+import { AddTransactionModalComponent } from '@shared/modals/add-transaction-modal/add-transaction-modal.component';
 
 @Component({
   selector: 'app-weekly-expenses',
@@ -23,7 +24,8 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
   constructor(
     private budgetDataService: BudgetDataService,
     private weeklyExpensesService: WeeklyExpensesService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -111,5 +113,100 @@ export class WeeklyExpensesPage implements OnInit, OnDestroy {
     });
 
     await modal.present();
+    
+    const { data } = await modal.onDidDismiss();
+    
+    if (data && data.action && data.entry) {
+      if (data.action === 'edit') {
+        this.handleEditEntry(data.entry);
+      } else if (data.action === 'delete') {
+        this.handleDeleteEntry(data.entry);
+      }
+    }
+  }
+
+  private async handleEditEntry(entry: any) {
+    const isTransaction = this.isTransaction(entry);
+    
+    const modal = await this.modalController.create({
+      component: AddTransactionModalComponent,
+      componentProps: {
+        editMode: true,
+        editData: {
+          id: entry.id,
+          type: isTransaction ? (entry as Transaction).type : 'expense',
+          category: isTransaction ? (entry as Transaction).category : (entry as Expense).category,
+          categoryColor: isTransaction ? (entry as Transaction).categoryColor : (entry as Expense).categoryColor || '#95A5A6',
+          amount: entry.amount,
+          date: entry.date,
+          description: entry.description
+        }
+      }
+    });
+
+    await modal.present();
+    
+    const { data, role } = await modal.onDidDismiss();
+    
+    if (role === 'confirm' && data) {
+      // Update the transaction or expense
+      if (isTransaction) {
+        const updatedTransaction: Transaction = {
+          id: entry.id,
+          type: data.type,
+          category: data.category,
+          categoryColor: data.categoryColor,
+          amount: data.amount,
+          date: data.date,
+          description: data.description
+        };
+        await this.budgetDataService.updateTransaction(updatedTransaction);
+      } else {
+        const updatedExpense: Expense = {
+          id: entry.id,
+          type: data.type,
+          category: data.category,
+          categoryColor: data.categoryColor,
+          amount: data.amount,
+          date: data.date,
+          description: data.description
+        };
+        await this.budgetDataService.updateExpense(updatedExpense);
+      }
+    }
+  }
+
+  private async handleDeleteEntry(entry: any) {
+    const alert = await this.alertController.create({
+      header: 'Confirm Delete',
+      message: `Are you sure you want to delete this ${this.formatCurrency(entry.amount)} entry?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: async () => {
+            const allTransactions = this.budgetDataService.getTransactions();
+            const transaction = allTransactions.find(t => t.id === entry.id);
+            
+            if (transaction) {
+              await this.budgetDataService.deleteTransaction(entry.id);
+            } else {
+              await this.budgetDataService.deleteExpense(entry.id);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private isTransaction(entry: any): entry is Transaction {
+    // Check if entry has 'type' property which is specific to Transaction
+    return 'type' in entry && (entry.type === 'expense' || entry.type === 'income');
   }
 }

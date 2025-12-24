@@ -27,16 +27,29 @@
     </div>
 
     <div *ngIf="displayEntries.length > 0" class="entries-list">
-      <div *ngFor="let entry of displayEntries" class="entry-card">
-        <div class="entry-content">
-          <div class="entry-date">
-            <ion-icon name="calendar-outline"></ion-icon>
-            <span>{{ formatDate(entry.date) }}</span>
+      <ion-item-sliding *ngFor="let entry of displayEntries">
+        <ion-item lines="none" class="entry-item">
+          <div class="entry-card">
+            <div class="entry-content">
+              <div class="entry-date">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <span>{{ formatDate(entry.date) }}</span>
+              </div>
+              <div class="entry-description">{{ entry.description }}</div>
+            </div>
+            <div class="entry-amount">{{ formatCurrency(entry.amount) }}</div>
           </div>
-          <div class="entry-description">{{ entry.description }}</div>
-        </div>
-        <div class="entry-amount">{{ formatCurrency(entry.amount) }}</div>
-      </div>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option class="edit-option" (click)="onEditEntry(entry)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option class="delete-option" color="danger" (click)="onDeleteEntry(entry)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </div>
   </div>
 </ion-content>

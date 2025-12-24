@@ -7,6 +7,7 @@ export interface CategoryEntry {
   description: string;
   amount: number;
   date: Date;
+  originalEntry?: Transaction | Expense;
 }
 
 @Component({
@@ -32,7 +33,8 @@ export class WeeklyCategoryEntriesModalComponent implements OnInit {
       id: entry.id,
       description: entry.description || 'No description',
       amount: entry.amount,
-      date: new Date(entry.date)
+      date: new Date(entry.date),
+      originalEntry: entry // Store the original entry for proper deletion/editing
     }));
 
     // Sort by date, most recent first
@@ -69,6 +71,22 @@ export class WeeklyCategoryEntriesModalComponent implements OnInit {
 
   onClose() {
     this.modalController.dismiss();
+  }
+
+  onEditEntry(entry: CategoryEntry) {
+    // Close modal and pass the original entry to edit
+    this.modalController.dismiss({
+      action: 'edit',
+      entry: entry.originalEntry || entry
+    });
+  }
+
+  onDeleteEntry(entry: CategoryEntry) {
+    // Close modal and pass the original entry to delete
+    this.modalController.dismiss({
+      action: 'delete',
+      entry: entry.originalEntry || entry
+    });
   }
 }
 

@@ -98,6 +98,22 @@ export class BudgetDataService {
     this.expensesSubject.next(expenses);
   }
 
+  async updateTransaction(updatedTransaction: Transaction): Promise<void> {
+    const transactions = this.transactionsSubject.value;
+    const index = transactions.findIndex(t => t.id === updatedTransaction.id);
+    if (index !== -1) {
+      transactions[index] = updatedTransaction;
+      await this.storageService.set(this.TRANSACTIONS_KEY, transactions);
+      this.transactionsSubject.next(transactions);
+    }
+  }
+
+  async deleteTransaction(transactionId: string): Promise<void> {
+    const transactions = this.transactionsSubject.value.filter(t => t.id !== transactionId);
+    await this.storageService.set(this.TRANSACTIONS_KEY, transactions);
+    this.transactionsSubject.next(transactions);
+  }
+
   getBudgetData(): BudgetData | null {
     return this.budgetDataSubject.value;
   }
