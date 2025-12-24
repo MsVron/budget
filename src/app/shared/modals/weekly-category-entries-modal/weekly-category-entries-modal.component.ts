@@ -34,10 +34,9 @@ export class WeeklyCategoryEntriesModalComponent implements OnInit {
       description: entry.description || 'No description',
       amount: entry.amount,
       date: new Date(entry.date),
-      originalEntry: entry // Store the original entry for proper deletion/editing
+      originalEntry: entry
     }));
 
-    // Sort by date, most recent first
     this.displayEntries.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
@@ -74,7 +73,6 @@ export class WeeklyCategoryEntriesModalComponent implements OnInit {
   }
 
   onEditEntry(entry: CategoryEntry) {
-    // Close modal and pass the original entry to edit
     this.modalController.dismiss({
       action: 'edit',
       entry: entry.originalEntry || entry
@@ -82,7 +80,6 @@ export class WeeklyCategoryEntriesModalComponent implements OnInit {
   }
 
   onDeleteEntry(entry: CategoryEntry) {
-    // Close modal and pass the original entry to delete
     this.modalController.dismiss({
       action: 'delete',
       entry: entry.originalEntry || entry
