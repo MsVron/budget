@@ -1,66 +1,100 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-title>Add Transaction</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="onCancel()">
-          <ion-icon name="close" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content class="ion-padding">
+  <ion-toolbar>
+    <ion-title class="modal-title">Add Transaction</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="modal-container">
     <form [formGroup]="transactionForm">
       
       <!-- Type Selector -->
-      <ion-segment formControlName="type" mode="ios">
-        <ion-segment-button value="expense">
-          <ion-label>Expense</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="income">
-          <ion-label>Income</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-  
-      <!-- Category Dropdown -->
-      <ion-item class="form-item">
-        <ion-label position="stacked">Category *</ion-label>
-        <ion-select 
-          formControlName="category" 
-          placeholder="Select category"
-          interface="popover">
-          <ion-select-option *ngFor="let category of categories" [value]="category">
-            {{ category }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-text color="danger" *ngIf="transactionForm.get('category')?.touched && transactionForm.get('category')?.hasError('required')">
-        <p class="error-message">Category is required</p>
-      </ion-text>
-  
+      <div class="form-section">
+        <ion-segment formControlName="type" mode="ios" class="type-segment">
+          <ion-segment-button value="expense">
+            <ion-label>Expense</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="income">
+            <ion-label>Income</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
       <!-- Amount Input -->
-      <ion-item class="form-item">
-        <ion-label position="stacked">Amount *</ion-label>
-        <ion-input 
-          formControlName="amount"
-          type="number"
-          inputmode="decimal"
-          placeholder="0.00"
-          min="0"
-          step="0.01">
-        </ion-input>
-      </ion-item>
-      <ion-text color="danger" *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('required')">
-        <p class="error-message">Amount is required</p>
-      </ion-text>
-      <ion-text color="danger" *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('min')">
-        <p class="error-message">Amount must be greater than 0</p>
-      </ion-text>
-  
+      <div class="form-section">
+        <label class="form-label">Amount *</label>
+        <div class="amount-input-wrapper">
+          <input 
+            class="amount-input"
+            formControlName="amount"
+            type="number"
+            inputmode="decimal"
+            placeholder="0.00"
+            min="0"
+            step="0.01">
+          <span class="currency-symbol">dh</span>
+        </div>
+        <div class="error-text" *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('required')">
+          Amount is required
+        </div>
+        <div class="error-text" *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('min')">
+          Amount must be greater than 0
+        </div>
+      </div>
+
+      <!-- Category selection -->
+      <div class="form-section">
+        <label class="form-label">Category *</label>
+        
+        <!-- Category dropdown -->
+        <div class="category-select-wrapper">
+          <select 
+            class="category-select"
+            formControlName="category"
+            (change)="onCategoryChange($event)">
+            <option value="" disabled selected>Select a category</option>
+            <option 
+              *ngFor="let category of categories" 
+              [value]="category.name"
+              [attr.data-color]="category.color">
+              {{ category.name }}
+            </option>
+          </select>
+          <div class="selected-category-indicator" *ngIf="transactionForm.get('category')?.value">
+            <span class="category-color-dot" [style.background-color]="selectedCategoryColor"></span>
+          </div>
+        </div>
+
+        <!-- Add/manage category buttons -->
+        <div class="category-actions">
+          <button 
+            type="button"
+            class="category-action-btn add-btn" 
+            (click)="openCategoryManagement()">
+            <ion-icon name="add-outline"></ion-icon>
+            <span>Add new category</span>
+          </button>
+          <button 
+            type="button"
+            class="category-action-btn manage-btn" 
+            *ngIf="categories.length > 0"
+            (click)="openManageCategories()">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Manage categories</span>
+          </button>
+        </div>
+
+        <div class="error-text" *ngIf="transactionForm.get('category')?.touched && transactionForm.get('category')?.hasError('required')">
+          Category is required
+        </div>
+      </div>
+
       <!-- Date Picker -->
-      <ion-item class="form-item">
-        <ion-label position="stacked">Date *</ion-label>
-        <ion-datetime-button datetime="transaction-date"></ion-datetime-button>
+      <div class="form-section">
+        <label class="form-label">Date *</label>
+        <div class="date-picker-wrapper">
+          <ion-datetime-button datetime="transaction-date"></ion-datetime-button>
+        </div>
         <ion-modal [keepContentsMounted]="true">
           <ng-template>
             <ion-datetime 
@@ -71,37 +105,172 @@
             </ion-datetime>
           </ng-template>
         </ion-modal>
-      </ion-item>
-  
+      </div>
+
       <!-- Description (Optional) -->
-      <ion-item class="form-item">
-        <ion-label position="stacked">Description (Optional)</ion-label>
-        <ion-textarea 
+      <div class="form-section">
+        <label class="form-label">Description (Optional)</label>
+        <textarea 
+          class="description-input"
           formControlName="description"
           placeholder="Add notes..."
           rows="3"
           maxlength="200">
-        </ion-textarea>
-      </ion-item>
-  
+        </textarea>
+      </div>
+
     </form>
-  </ion-content>
-  
-  <ion-footer>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button color="medium" (click)="onCancel()">
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="footer-buttons">
+    <button class="btn btn-cancel" (click)="onCancel()">
+      Cancel
+    </button>
+    <button 
+      class="btn btn-confirm" 
+      (click)="onConfirm()"
+      [disabled]="!isFormValid()">
+      Confirm
+    </button>
+  </div>
+</ion-footer>
+
+<!-- Add/edit category modal -->
+<ion-modal 
+  [isOpen]="showCategoryModal" 
+  (didDismiss)="closeCategoryManagement()"
+  class="category-modal">
+  <ng-template>
+    <div class="category-management">
+      <div class="category-modal-header">
+        <h2>{{ editingCategory ? 'Edit Category' : 'Add Category' }}</h2>
+        <ion-icon name="close" (click)="closeCategoryManagement()"></ion-icon>
+      </div>
+
+      <div class="category-modal-content">
+        <form [formGroup]="newCategoryForm">
+          
+          <!-- Default categories (only when adding new) -->
+          <div class="form-group" *ngIf="!editingCategory && availableDefaultCategories.length > 0">
+            <label class="form-label">Choose from defaults</label>
+            <div class="default-categories-list">
+              <div 
+                *ngFor="let defaultCat of availableDefaultCategories"
+                class="default-category-item"
+                (click)="selectDefaultCategory(defaultCat)">
+                <span class="category-color" [style.background-color]="defaultCat.color"></span>
+                <span>{{ defaultCat.name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider-text" *ngIf="!editingCategory && availableDefaultCategories.length > 0">
+            <span>OR CREATE CUSTOM</span>
+          </div>
+
+          <!-- Category Name Input -->
+          <div class="form-group">
+            <label class="form-label">Category Name *</label>
+            <input 
+              type="text"
+              class="text-input"
+              formControlName="name"
+              placeholder="e.g., Groceries"
+              maxlength="30">
+            <div class="error-text" *ngIf="hasNewCategoryError('required')">
+              Category name is required
+            </div>
+            <div class="error-text" *ngIf="hasNewCategoryError('duplicate')">
+              This category already exists
+            </div>
+          </div>
+
+          <!-- Color Selection -->
+          <div class="form-group">
+            <label class="form-label">Color</label>
+            <div class="color-palette">
+              <div 
+                *ngFor="let color of colorPalette"
+                class="color-option"
+                [class.selected]="isNewCategoryColorSelected(color)"
+                [style.background-color]="color"
+                (click)="selectNewCategoryColor(color)">
+                <ion-icon name="checkmark" *ngIf="isNewCategoryColorSelected(color)"></ion-icon>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="category-modal-footer">
+        <button 
+          type="button"
+          class="btn btn-cancel" 
+          (click)="closeCategoryManagement()">
           Cancel
-        </ion-button>
-      </ion-buttons>
-      <ion-buttons slot="end">
-        <ion-button 
-          color="primary" 
-          (click)="onConfirm()"
-          [disabled]="!isFormValid()"
-          [strong]="true">
-          Confirm
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-footer>
+        </button>
+        <button 
+          type="button"
+          class="btn btn-confirm" 
+          (click)="saveCategory()"
+          [disabled]="!newCategoryForm.valid">
+          {{ editingCategory ? 'Update' : 'Add' }}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<!-- Manage Categories Modal -->
+<ion-modal 
+  [isOpen]="showManageCategoriesModal" 
+  (didDismiss)="closeManageCategories()"
+  class="category-modal">
+  <ng-template>
+    <div class="category-management">
+      <div class="category-modal-header">
+        <h2>Manage Categories</h2>
+        <ion-icon name="close" (click)="closeManageCategories()"></ion-icon>
+      </div>
+
+      <div class="category-modal-content">
+        <div class="manage-categories-list">
+          <div 
+            *ngFor="let category of categories" 
+            class="manage-category-item">
+            <div class="category-info">
+              <span class="category-color" [style.background-color]="category.color"></span>
+              <span class="category-name">{{ category.name }}</span>
+            </div>
+            <div class="category-item-actions">
+              <button 
+                type="button"
+                class="icon-btn edit-btn"
+                (click)="editCategoryFromManage(category)">
+                <ion-icon name="create-outline"></ion-icon>
+              </button>
+              <button 
+                type="button"
+                class="icon-btn delete-btn"
+                (click)="deleteCategoryFromManage(category)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="category-modal-footer">
+        <button 
+          type="button"
+          class="btn btn-confirm full-width" 
+          (click)="closeManageCategories()">
+          Done
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
