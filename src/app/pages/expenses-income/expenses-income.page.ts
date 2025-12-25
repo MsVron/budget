@@ -4,8 +4,9 @@ import { ModalController } from '@ionic/angular';
 import { BudgetDataService } from '@services/budget/budget-data.service';
 import { PlannedBudgetService } from '@services/budget/planned-budget.service';
 import { ExpensesIncomeService } from '@services/budget/expenses-income.service';
-import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget } from '@models/budget.model';
-import { SetPlannedBudgetModalComponent } from '@shared/modals/set-planned-budget-modal/set-planned-budget-modal.component';
+import { CategoryService } from '@services/category/category.service';
+import { ExpensesIncomeSummary, CategoryBudget, IncomeBudget, Transaction } from '@models/budget.model';
+import { SetPlannedBudgetModalComponent, ActualBudgetData } from '@shared/modals/set-planned-budget-modal/set-planned-budget-modal.component';
 
 @Component({
   selector: 'app-expenses-income',
@@ -36,6 +37,7 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
     private budgetDataService: BudgetDataService,
     private plannedBudgetService: PlannedBudgetService,
     private expensesIncomeService: ExpensesIncomeService,
+    private categoryService: CategoryService,
     private modalController: ModalController
   ) { }
 
@@ -151,7 +153,8 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
       componentProps: {
         category,
         type,
-        currentPlanned
+        currentPlanned,
+        mode: 'planned'
       }
     });
 
@@ -167,6 +170,69 @@ export class ExpensesIncomePage implements OnInit, OnDestroy {
         budgetData.month,
         budgetData.year
       );
+      this.updateSummary();
+    }
+  }
+
+  async setActualIncome(source: string, currentActual: number) {
+    const budgetData = this.budgetDataService.getBudgetData();
+    if (!budgetData) return;
+
+    const modal = await this.modalController.create({
+      component: SetPlannedBudgetModalComponent,
+      componentProps: {
+        category: source,
+        type: 'income',
+        currentPlanned: currentActual,
+        mode: 'actual'
+      }
+    });
+
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss<ActualBudgetData>();
+
+    if (role === 'confirm' && data) {
+      // Get all income transactions for this source in the current month
+      const monthlyTransactions = this.budgetDataService.getMonthlyTransactions(
+        budgetData.month,
+        budgetData.year,
+        'income'
+      );
+      
+      const sourceTransactions = monthlyTransactions.filter(
+        t => t.category === source
+      );
+
+      // Delete all existing transactions for this source
+      for (const transaction of sourceTransactions) {
+        await this.budgetDataService.deleteTransaction(transaction.id);
+      }
+
+      // Create a new transaction with the new amount (if amount > 0)
+      if (data.actualAmount > 0) {
+        // Get category color
+        const category = this.categoryService.getCategoryByName(source, 'income');
+        const categoryColor = category?.color || '#61FF36'; // Default green for income
+
+        // Convert month name to index
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthIndex = months.indexOf(budgetData.month);
+
+        const newTransaction: Transaction = {
+          id: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          type: 'income',
+          category: source,
+          categoryColor: categoryColor,
+          amount: data.actualAmount,
+          description: `${source} income`,
+          date: new Date(budgetData.year, monthIndex, 1)
+        };
+
+        await this.budgetDataService.addTransaction(newTransaction);
+      }
+
       this.updateSummary();
     }
   }

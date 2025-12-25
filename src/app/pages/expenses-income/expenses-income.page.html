@@ -142,7 +142,7 @@
               <span class="amount-label">Planned</span>
               <span class="amount-value">{{ formatCurrency(source.planned) }}</span>
             </div>
-            <div class="amount-row actual-row">
+            <div class="amount-row actual-row clickable" (click)="setActualIncome(source.source, source.actual); $event.stopPropagation()">
               <span class="amount-label">Actual</span>
               <span class="amount-value">{{ formatCurrency(source.actual) }}</span>
             </div>

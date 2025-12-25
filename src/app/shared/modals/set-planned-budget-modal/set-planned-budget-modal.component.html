@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Set Planned Budget</ion-title>
+    <ion-title>{{ title }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onCancel()">
         <ion-icon name="close-outline"></ion-icon>
@@ -23,21 +23,21 @@
     </div>
 
     <div class="form-section">
-      <ion-label class="section-label">Planned Amount</ion-label>
+      <ion-label class="section-label">{{ amountLabel }}</ion-label>
       <ion-item lines="none" class="input-item">
         <ion-input
           type="number"
-          formControlName="plannedAmount"
+          formControlName="amount"
           placeholder="0.00"
           min="0"
           step="0.01"
         ></ion-input>
         <ion-text slot="start" class="currency-symbol">dh</ion-text>
       </ion-item>
-      <ion-text color="danger" *ngIf="budgetForm.get('plannedAmount')?.touched && budgetForm.get('plannedAmount')?.hasError('required')">
-        <small>Planned amount is required</small>
+      <ion-text color="danger" *ngIf="budgetForm.get('amount')?.touched && budgetForm.get('amount')?.hasError('required')">
+        <small>{{ amountLabel }} is required</small>
       </ion-text>
-      <ion-text color="danger" *ngIf="budgetForm.get('plannedAmount')?.touched && budgetForm.get('plannedAmount')?.hasError('min')">
+      <ion-text color="danger" *ngIf="budgetForm.get('amount')?.touched && budgetForm.get('amount')?.hasError('min')">
         <small>Amount must be 0 or greater</small>
       </ion-text>
     </div>
@@ -47,7 +47,7 @@
         Cancel
       </ion-button>
       <ion-button expand="block" (click)="onConfirm()" [disabled]="!isFormValid()">
-        Set Budget
+        {{ buttonLabel }}
       </ion-button>
     </div>
   </form>
