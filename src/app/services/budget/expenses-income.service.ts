@@ -96,17 +96,19 @@ export class ExpensesIncomeService {
       ...Object.keys(incomeBySource)
     ]);
 
-    const incomeSources: IncomeBudget[] = Array.from(allIncomeSources).map(source => {
-      const planned = budgetData 
-        ? this.plannedBudgetService.getPlannedBudget(source, 'income', budgetData.month, budgetData.year)
-        : 0;
-      
-      return {
-        source,
-        planned,
-        actual: incomeBySource[source] || 0
-      };
-    });
+    const incomeSources: IncomeBudget[] = Array.from(allIncomeSources)
+      .map(source => {
+        const planned = budgetData 
+          ? this.plannedBudgetService.getPlannedBudget(source, 'income', budgetData.month, budgetData.year)
+          : 0;
+        
+        return {
+          source,
+          planned,
+          actual: incomeBySource[source] || 0
+        };
+      })
+      .filter(source => source.planned !== 0 || source.actual !== 0); // Filter out sources with both planned and actual as 0
 
     const totalIncomePlanned = incomeSources.reduce((sum, src) => sum + src.planned, 0);
     const totalIncomeActual = incomeSources.reduce((sum, src) => sum + src.actual, 0);
