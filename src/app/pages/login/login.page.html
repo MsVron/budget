@@ -10,15 +10,17 @@
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <ion-item lines="none" class="input-item">
           <ion-input
-            type="text"
-            formControlName="username"
-            placeholder="Username"
+            type="email"
+            formControlName="email"
+            placeholder="Email"
             class="custom-input"
+            autocomplete="email"
           ></ion-input>
         </ion-item>
-        <div class="error-message" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
           <ion-text color="danger">
-            <small>Username must be at least 3 characters</small>
+            <small *ngIf="loginForm.get('email')?.hasError('required')">Email is required</small>
+            <small *ngIf="loginForm.get('email')?.hasError('email')">Please enter a valid email</small>
           </ion-text>
         </div>
 
@@ -28,11 +30,12 @@
             formControlName="password"
             placeholder="Password"
             class="custom-input"
+            autocomplete="current-password"
           ></ion-input>
         </ion-item>
         <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           <ion-text color="danger">
-            <small>Password must be at least 8 characters</small>
+            <small>Password must be at least 6 characters</small>
           </ion-text>
         </div>
 
@@ -48,7 +51,7 @@
 
       <div class="signup-section">
         <ion-text color="medium">
-          <p>Don't have an account? <a (click)="goToSignup()" class="signup-link">Sign Up</a></p>
+          <p>Don't have an account? <a routerLink="/signup" class="signup-link">Sign Up</a></p>
         </ion-text>
       </div>
     </div>

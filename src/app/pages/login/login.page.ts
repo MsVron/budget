@@ -23,34 +23,40 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   async onLogin() {
     if (this.loginForm.valid) {
       const loading = await this.loadingController.create({
-        message: 'Logging in...',
-        duration: 3000
+        message: 'Logging in...'
       });
       await loading.present();
 
-      const { username, password } = this.loginForm.value;
-      const success = await this.authService.login(username, password);
+      const { email, password } = this.loginForm.value;
+      const result = await this.authService.login(email, password);
 
       await loading.dismiss();
 
-      if (success) {
+      if (result.success) {
         this.router.navigate(['/app/monthly-budget']);
       } else {
         const alert = await this.alertController.create({
           header: 'Login Failed',
-          message: 'Invalid username or password. Use "admin" / "adminadmin"',
+          message: result.error || 'Unable to login. Please try again.',
           buttons: ['OK']
         });
         await alert.present();
       }
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Invalid Form',
+        message: 'Please enter a valid email and password (min 6 characters).',
+        buttons: ['OK']
+      });
+      await alert.present();
     }
   }
 

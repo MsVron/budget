@@ -8,6 +8,13 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+// Firebase imports
+import { initializeApp } from 'firebase/app';
+import { environment } from '../environments/environment';
+
+// Initialize Firebase
+initializeApp(environment.firebaseConfig);
+
 @NgModule({
   declarations: [AppComponent],
   imports: [

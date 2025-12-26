@@ -2,30 +2,78 @@
   <div class="signup-container">
     <div class="signup-card">
       <div class="logo-section">
-        <ion-icon name="wallet-outline" class="logo-icon"></ion-icon>
-        <h1>Budget Tracker</h1>
-        <p>Create your account</p>
+        <ion-icon name="person-add-outline" class="logo-icon"></ion-icon>
+        <h1>Create Account</h1>
+        <p>Join Budget Tracker</p>
       </div>
 
-      <ion-card>
-        <ion-card-content>
-          <ion-text color="medium">
-            <p style="text-align: center;">Signup functionality coming soon!</p>
-            <p style="text-align: center;">For testing, use the login page with:</p>
-            <p style="text-align: center;"><strong>Username:</strong> admin</p>
-            <p style="text-align: center;"><strong>Password:</strong> adminadmin</p>
+      <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+            autocomplete="email"
+            class="custom-input"
+          >
+          </ion-input>
+        </ion-item>
+        <div
+          class="error-message"
+          *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched"
+        >
+          <ion-text color="danger">
+            <small>Please enter a valid email</small>
           </ion-text>
-        </ion-card-content>
-      </ion-card>
+        </div>
 
-      <ion-button
-        expand="block"
-        fill="outline"
-        (click)="goToLogin()"
-        class="login-button"
-      >
-        Back to Login
-      </ion-button>
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="password"
+            formControlName="password"
+            placeholder="Password"
+            autocomplete="new-password"
+            class="custom-input"
+          >
+          </ion-input>
+        </ion-item>
+        <div
+          class="error-message"
+          *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"
+        >
+          <ion-text color="danger">
+            <small>Password must be at least 6 characters</small>
+          </ion-text>
+        </div>
+
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Confirm Password"
+            autocomplete="new-password"
+            class="custom-input"
+          >
+          </ion-input>
+        </ion-item>
+        <div
+          class="error-message"
+          *ngIf="signupForm.get('confirmPassword')?.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched"
+        >
+          <ion-text color="danger">
+            <small>Passwords do not match</small>
+          </ion-text>
+        </div>
+
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="signupForm.invalid"
+          class="signup-button"
+        >
+          Sign Up
+        </ion-button>
+      </form>
     </div>
-  </div>
-</ion-content>
+  </div></ion-content
+>
