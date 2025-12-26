@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/core/auth.service';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { getAuth, signOut } from 'firebase/auth';
 
 @Component({
   selector: 'app-signup',
@@ -53,6 +54,10 @@ export class SignupPage implements OnInit {
       await loading.dismiss();
 
       if (result.success) {
+
+        const auth = getAuth();
+        await signOut(auth);
+        
         const alert = await this.alertController.create({
           header: 'Success',
           message: 'Account created successfully! Please login.',
