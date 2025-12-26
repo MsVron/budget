@@ -38,7 +38,6 @@ export class SetPlannedBudgetModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Always set the initial value, even if it's 0
     this.budgetForm.patchValue({
       amount: this.currentPlanned || 0
     });
