@@ -12,6 +12,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
   loginForm!: FormGroup;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -62,5 +63,9 @@ export class LoginPage implements OnInit {
 
   goToSignup() {
     this.router.navigate(['/signup']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

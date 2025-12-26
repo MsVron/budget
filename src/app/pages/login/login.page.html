@@ -26,12 +26,18 @@
 
         <ion-item lines="none" class="input-item">
           <ion-input
-            type="password"
+            [type]="showPassword ? 'text' : 'password'"
             formControlName="password"
             placeholder="Password"
             class="custom-input"
             autocomplete="current-password"
           ></ion-input>
+          <ion-icon
+            [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            slot="end"
+            (click)="togglePasswordVisibility()"
+            class="password-toggle-icon"
+          ></ion-icon>
         </ion-item>
         <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           <ion-text color="danger">
