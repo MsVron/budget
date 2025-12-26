@@ -13,6 +13,8 @@ import { getAuth, signOut } from 'firebase/auth';
 })
 export class SignupPage implements OnInit {
   signupForm!: FormGroup;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -95,5 +97,13 @@ export class SignupPage implements OnInit {
 
   goToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

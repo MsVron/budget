@@ -55,6 +55,17 @@
   font-family: "Inter", sans-serif;
 }
 
+.password-toggle-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--ion-color-medium);
+  padding: 0 8px;
+  
+  &:hover {
+    color: var(--ion-color-primary);
+  }
+}
+
 .error-message {
   margin-bottom: 1rem;
   padding-left: 8px;
